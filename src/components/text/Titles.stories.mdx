@@ -1,0 +1,31 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs/blocks';
+
+import {
+  TitleXL,
+  TitleL,
+  Title,
+  TitleS,
+  TitleTiny,
+  Label,
+} from './Titles.jsx';
+
+<Meta title="Basics/Text/Titles" />
+
+# Titles
+
+The following title elements provide consistent styling
+for titles across the app. They all take the text to display
+as the component's `children`.
+
+<Canvas>
+  <Story name="Titles">
+    <TitleXL>TitleXL renders an h1</TitleXL>
+    <TitleL>TitleL renders an h2</TitleL>
+    <Title>Title renders an h3</Title>
+    <TitleS>TitleS renders an h4</TitleS>
+    <TitleTiny>TitleTiny renders an h5</TitleTiny>
+    <Label>Label renders an h6</Label>
+  </Story>
+</Canvas>
+
+<ArgsTable of={TitleXL} />
