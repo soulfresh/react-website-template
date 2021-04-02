@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+set -e
+
+echo 'Building Docs 🚀'
+
+# Add all commands used to build your docs here...
+
+# Create JS documentation
+# I usually create multiple outputs which I then
+# include into my Storybook docs as described here:
+# https://github.com/storybookjs/storybook/issues/7644#issuecomment-710361531
+
+# npx jsdoc2md --files src/foo.js > src/API.md
+
+# Create SASS documentation
+npx sassdoc2md ./src/**/*.scss > ./src/SASS_API.md
+
+echo 'Donzo 💪'
