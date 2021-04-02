@@ -1,0 +1,99 @@
+{
+  "name": "",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "env-cmd -f ./.env.development react-app-rewired start",
+    "start-static": "env-cmd -f ./.env.development.static react-app-rewired start",
+    "build": "react-app-rewired build",
+    "analyze-ci": "yarn build && source-map-explorer 'build/static/js/*.js' --html coverage/analysis/result.html",
+    "analyze": "yarn analyze-ci && open coverage/analysis/result.html",
+    "clean": "rimraf build coverage storybook-static",
+    "lint": "yarn eslint && yarn stylelint",
+    "stylelint": "stylelint 'src/**/*.scss'",
+    "eslint": "eslint --max-warnings 1 './src/**/*.{js,jsx}'",
+    "sass-docs": "npx sassdoc2md ./src/**/*.scss --markdown ./src/docs/Utils.stories.mdx.hbs -s API > ./src/docs/Utils.stories.mdx",
+    "test": "react-scripts test",
+    "test-ci": "react-scripts test --watchAll=false --runInBand",
+    "test-debug": "react-scripts --inspect-brk test --runInBand --no-cache",
+    "validate": "yarn lint && yarn test-ci --coverage && yarn analyze-ci && yarn build-storybook",
+    "generate": "plop --plopfile ./scripts/plopfile.js",
+    "download-schemas": "gq https://your-graphql-endpoint.com/v1/graphql -H 'X-Hasura-Admin-Secret: password' --introspect > ./src/example-graph-api-schema.graphql",
+    "release": "./scripts/release",
+    "storybook": "yarn docs && start-storybook -p 6006 -s public",
+    "build-storybook": "yarn docs && build-storybook -s public",
+    "deploy-storybook": "storybook-to-ghpages",
+    "deploy-storybook-ci": "storybook-to-ghpages -- --ci"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.3.13",
+    "@thesoulfresh/utils": "^0.2.2",
+    "graphql": "^15.5.0",
+    "normalize.css": "^8.0.1",
+    "query-string": "^7.0.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-ga": "^3.3.0",
+    "react-router-dom": "^5.2.0",
+    "snake-case": "^3.0.4",
+    "web-vitals": "^1.0.1"
+  },
+  "devDependencies": {
+    "@hidoo/sassdoc-to-markdown": "^0.4.2",
+    "@storybook/addon-actions": "^6.1.21",
+    "@storybook/addon-docs": "^6.1.21",
+    "@storybook/addon-essentials": "^6.1.21",
+    "@storybook/addon-links": "^6.1.21",
+    "@storybook/node-logger": "^6.1.21",
+    "@storybook/preset-create-react-app": "^3.1.6",
+    "@storybook/react": "^6.1.21",
+    "@storybook/storybook-deployer": "^2.8.7",
+    "@testing-library/dom": "^7.30.0",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.8.3",
+    "@thesoulfresh/react-tools": "^0.1.0",
+    "@thesoulfresh/sass-theming": "^1.2.1",
+    "@types/react": "^17.0.3",
+    "babel-loader": "8.1.0",
+    "colors": "^1.4.0",
+    "customize-cra": "^1.0.0",
+    "deepmerge": "^4.2.2",
+    "env-cmd": "^10.1.0",
+    "faker": "^5.4.0",
+    "graphql-tools": "^7.0.4",
+    "html-replace-webpack-plugin": "^2.6.0",
+    "plop": "^2.7.4",
+    "prop-types": "^15.7.2",
+    "react-app-rewired": "^2.1.8",
+    "react-scripts": "4.0.3",
+    "rimraf": "^3.0.2",
+    "sass": "^1.32.8",
+    "source-map-explorer": "^2.5.2",
+    "stylelint": "^13.11.0",
+    "stylelint-a11y": "^1.2.3",
+    "stylelint-config-css-modules": "^2.2.0",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-scss": "^3.19.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "~/(.*)": "<rootDir>/src/$1"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "storybook-deployer": {
+    "commitMessage": "Deploy Storybook [skip ci]"
+  }
+}
