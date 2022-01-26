@@ -1,9 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
+import { createExampleServiceClientMock } from '~/test';
+import { ExampleService } from '~/services';
+
 import App from './App';
 
 describe('App', () => {
-  let authService, user;
+  let authService, user, exampleService;
 
   beforeEach(() => {
     authService = {
@@ -11,6 +15,11 @@ describe('App', () => {
       authenticate: jest.fn(),
     };
     user = {user: 'Bob'};
+
+    exampleService = new ExampleService({
+      client: createExampleServiceClientMock(),
+      debug: false,
+    });
   });
 
   describe('using the login page functionality', () => {
@@ -18,7 +27,7 @@ describe('App', () => {
       beforeEach(async () => {
         authService.getUser.mockReturnValue(Promise.resolve(user));
 
-        render(<App authService={authService} overlay={false} />);
+        render(<App authService={authService} overlay={false} exampleService={exampleService} />);
 
         await screen.findByTestId('Main');
       });
@@ -36,7 +45,7 @@ describe('App', () => {
       beforeEach(() => {
         authService.getUser.mockReturnValue(Promise.resolve(null));
 
-        render(<App authService={authService} overlay={false} />);
+        render(<App authService={authService} overlay={false}  exampleService={exampleService} />);
       });
 
       it('should render the login page.', () => {
@@ -101,7 +110,7 @@ describe('App', () => {
       beforeEach(async () => {
         authService.getUser.mockReturnValue(Promise.resolve(user));
 
-        render(<App authService={authService} overlay={true} />);
+        render(<App authService={authService} overlay={true}  exampleService={exampleService} />);
 
         await screen.findByTestId('Main');
       });
@@ -119,7 +128,7 @@ describe('App', () => {
       beforeEach(() => {
         authService.getUser.mockReturnValue(Promise.resolve(null));
 
-        render(<App authService={authService} overlay={true} />);
+        render(<App authService={authService} overlay={true}  exampleService={exampleService} />);
       });
 
       it('should render the login page.', () => {

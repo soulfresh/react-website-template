@@ -7,10 +7,12 @@ import {
 import {
   ExampleService,
   ExampleServiceProvider,
-  createExampleServiceClientMock,
   makeGraphQLErrorLink,
   makeExampleServiceCacheClient,
 } from '~/services';
+import {
+  createExampleServiceClientMock,
+} from '~/test';
 
 import { Main } from './Main.jsx';
 
