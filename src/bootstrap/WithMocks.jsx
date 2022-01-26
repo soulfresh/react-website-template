@@ -4,13 +4,40 @@ import queryString from 'query-string';
 import {
   env,
 } from '../env';
-// import {
-//   ExampleGraphAPI,
-//   useCreateExampleGraphAPI,
-//   ExampleGraphAPIProvider,
-// } from '~/services';
+import {
+  ExampleService,
+  ExampleServiceProvider,
+  createExampleServiceClientMock,
+  makeGraphQLErrorLink,
+  makeExampleServiceCacheClient,
+} from '~/services';
 
 import { Main } from './Main.jsx';
+
+function useExampleServiceClient(authResponse, onAuthFailure, exampleServiceClient, options) {
+  return React.useMemo(() => {
+    if (exampleServiceClient) {
+      // Use the mocked client if one was passed in.
+      /* istanbul ignore next: It's not important how the report service is created during testing */
+      return exampleServiceClient
+    } else if (authResponse?.token) {
+      // Generate a mock client if none was passed.
+      /* istanbul ignore next: It's not important how the report service is created during testing */
+      return new ExampleService({
+        client: createExampleServiceClientMock({
+          errorLink: makeGraphQLErrorLink(onAuthFailure),
+          cache: makeExampleServiceCacheClient(),
+          mocks: {}, // Extra mocks
+          generatorOptions: options, // Generator options
+          debug: env.verbose,
+        }),
+        debug: env.verbose,
+      })
+    } else {
+      return undefined
+    }
+  }, [authResponse, onAuthFailure, exampleServiceClient])
+}
 
 /**
  * Create an options object to pass to the mock
@@ -72,11 +99,14 @@ export default function WithMocks({
   mockOptions,
   // Allow passing services during testing...
   // xService,
+  exampleServiceClient,
+  onAuthFailure,
+  authResponse,
   ...rest
 }) {
   // Merge URL query prameters with any mock factory options
   // passed in.
-  // const options = makeMockFactoryOptions(mockOptions);
+  const options = makeMockFactoryOptions(mockOptions);
 
   // Construct service API clients here...
 
@@ -88,6 +118,10 @@ export default function WithMocks({
 
   // Wrap the `Main` component in any API context providers...
   return (
-    <Main {...rest} />
+    <ExampleServiceProvider
+      value={useExampleServiceClient(authResponse, onAuthFailure, exampleServiceClient, options)}
+    >
+      <Main {...rest} />
+    </ExampleServiceProvider>
   );
 }

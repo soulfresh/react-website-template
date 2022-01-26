@@ -2,13 +2,25 @@ import React from 'react';
 import queryString from 'query-string';
 
 import { env } from '../env';
-// import {
-//   ExampleGraphAPI,
-//   useCreateExampleGraphAPI,
-//   ExampleGraphAPIProvider,
-// } from '~/services';
+import {
+  ExampleService,
+  ExampleServiceProvider,
+} from '~/services';
 
 import { Main } from './Main.jsx';
+
+/* istanbul ignore next: This will never be run in tests but may be imported */
+function useExampleServiceClient(authResponse, onAuthFailure, exampleServiceClient, options) {
+  return React.useMemo(() => {
+    if (exampleServiceClient) {
+      return exampleServiceClient
+    } else if (authResponse?.token) {
+      return new ExampleService({ onAuthFailure, authToken: authResponse?.token, options })
+    } else {
+      return undefined
+    }
+  }, [authResponse, onAuthFailure, exampleServiceClient])
+}
 
 /**
  * Create an options object to pass to the service
@@ -53,13 +65,14 @@ function makeServiceFactoryOptions(options) {
 export default function WithServer({
   // Allow passing any services during testing
   // xService,
+  exampleServiceClient,
+  onAuthFailure,
+  authResponse,
   ...rest
 }) {
   // Merge URL query prameters with any factory options
   // passed in.
-  // const options = makeServiceFactoryOptions();
-
-  // Construct service API clients here...
+  const options = makeServiceFactoryOptions();
 
   if (!env.production) {
     if (!env.test) console.info('-- API clients have been made available globally --');
@@ -69,7 +82,11 @@ export default function WithServer({
 
   // Wrap the `Main` component in any API context providers...
   return (
-    <Main {...rest} />
+    <ExampleServiceProvider
+      value={useExampleServiceClient(authResponse, onAuthFailure, exampleServiceClient, options)}
+    >
+      <Main {...rest} />
+    </ExampleServiceProvider>
   );
 }
 

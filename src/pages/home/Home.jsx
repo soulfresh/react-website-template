@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { combineClasses } from '@thesoulfresh/utils';
 
 import { TitleXL } from '~/components';
+import { useExampleService } from '~/services';
 
 import styles from './Home.module.scss';
 
@@ -39,8 +40,14 @@ export function HomeConnected({
   // location,
   // match,
 }) {
+  const api = useExampleService();
+
+  // Use your API here
+  const doThatThing = () => api.doIt();
+
+  // Only dumb components deeper in this tree...
   return (
-    <Home />
+    <Home onDoThatThing={doThatThing} />
   );
 }
 
