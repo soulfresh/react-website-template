@@ -1,47 +1,71 @@
-const overrideCRA = require('../config-overrides');
+const path = require('path');
+const cracoConfig = require('../craco.config');
+
+const package = (p = '') => `../src/${p ? p + '/' : ''}**/*.stories.@(js|jsx|ts|tsx|mdx)`;
 
 module.exports = {
+  staticDirs: ['../public'],
   stories: [
-    // Design System
-    '../src/docs/**/*.stories.mdx',
     // Components
-    '../src/components/**/*.stories.mdx',
+    package('components'),
     // Pages
-    '../src/pages/**/*.stories.mdx',
+    package('pages'),
+    // Anything else
+    package(),
   ],
-  // TODO Get this working with essentials
   addons: [
-    "@storybook/addon-links",
-    // "@storybook/addon-essentials",
-    "@storybook/preset-create-react-app",
-    // '@storybook/addon-a11y',
-    {
-      name: '@storybook/addon-docs',
-      options: {
-        configureJSX: true,
-      },
-    },
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/preset-create-react-app',
   ],
-  refs: {
-   'design-system': {
-     title: "@thesoulfresh/sass-theming",
-     url: "https://soulfresh.github.io/sass-theming"
-   }
+  framework: '@storybook/react',
+  core: {
+    builder: 'webpack5',
   },
-  webpackFinal: (config) => {
-    const custom = overrideCRA(config);
-    return {
-      ...config,
-      resolve: {
-        ...config.resolve,
-        alias: {
-          ...custom.resolve.alias,
-        }
-      },
-      module: {
-        ...config.module,
-        rules: custom.module.rules,
-      }
+  refs: {
+    'react-tools': {
+      title: 'React Tools Lib',
+      url: 'https://soulfresh.github.io/react-tools',
+    },
+    'design-system': {
+      title: "SASS Theming Lib",
+      url: "https://soulfresh.github.io/sass-theming"
     }
   },
+  webpackFinal(baseConfig, options) {
+    const config = {
+      ...baseConfig,
+      module: {
+        ...(baseConfig.module ?? {}),
+        rules: [...(baseConfig.module?.rules ?? [])],
+      },
+      resolve: {
+        ...(baseConfig.resolve ?? {}),
+        alias: {
+          ...(baseConfig.alias ?? {}),
+          ...cracoConfig.webpack.alias,
+        },
+      },
+    };
+
+    if (options.configType === 'DEVELOPMENT') {
+      config.module.rules.push({
+        test: /,css&/,
+        use: [
+          {
+            loader: 'postcss-loader',
+            ident: 'postcss',
+            options: {
+              plugins: [],
+              verbose: true,
+            },
+          },
+        ],
+        include: path.resolve(__dirname, '../'),
+      });
+    }
+
+    return config;
+  },
 };
+

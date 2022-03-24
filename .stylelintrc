@@ -1,11 +1,11 @@
 {
   "plugins": [
-    "stylelint-a11y",
-    "stylelint-scss"
+    "stylelint-a11y"
   ],
   "extends": [
     "stylelint-config-standard",
-    "stylelint-config-css-modules"
+    "stylelint-config-css-modules",
+    "stylelint-config-standard-scss"
   ],
   "rules": {
     "no-empty-source": null,
@@ -18,7 +18,7 @@
     "rule-empty-line-before": null,
     "max-empty-lines": 2,
     "at-rule-no-unknown": null,
-    "scss/at-rule-no-unknown": true,
+    "function-no-unknown": null,
     "declaration-empty-line-before": null,
     "color-hex-case": null,
     "color-hex-length": null,
@@ -26,5 +26,12 @@
     "block-opening-brace-space-before": "always-multi-line",
     "no-descending-specificity": null,
     "function-parentheses-newline-inside": null,
+    "selector-class-pattern": null,
+    "alpha-value-notation": null,
+    "max-line-length": null,
+    "scss/function-no-unknown": null,
+    "scss/dollar-variable-empty-line-before": null,
+    "scss/at-if-closing-brace-space-after": null,
+    "scss/at-if-closing-brace-newline-after": null,
   }
 }

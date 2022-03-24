@@ -9,6 +9,6 @@ export function Header({
   onLogout,
 }) {
   return (
-    <Action button onClick={onLogout}>Logout</Action>
+    <Action onClick={onLogout}>Logout</Action>
   );
 }

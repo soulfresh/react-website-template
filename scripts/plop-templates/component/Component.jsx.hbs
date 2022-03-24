@@ -25,5 +25,11 @@ export function {{pascalCase name}}({
 }
 
 {{pascalCase name}}.propTypes = {
+  className: PropTypes.string,
+  /**
+   * Any other props you pass will be forwarded to the root
+   * element.
+   */
+  'other props...': PropTypes.any,
 };
 

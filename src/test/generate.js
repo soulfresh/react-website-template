@@ -1,9 +1,12 @@
 import {
   fromExampleGraph,
-  generateExampleGraphAPI,
 } from '~/services';
+import {
+  generateExampleService,
+} from '~/services/mocks';
 
 /**
+ * EXPERIMENTAL
  * This class simplifies generating mock data as returned
  * by your service classes. The API simply combines
  * your service generators with their `fromService`
@@ -14,7 +17,7 @@ import {
  *
  * Instead of having to do this:
  * const items = fromExampleGraph.items(
- *   generateExampleGraphAPI.items({randomize: false})
+ *   generateExampleService.items({randomize: false})
  * );
  */
 export class TestGenerator {
@@ -58,6 +61,6 @@ export class TestGenerator {
 }
 
 export const generate = new TestGenerator([{
-  generate: generateExampleGraphAPI,
+  generate: generateExampleService,
   from: fromExampleGraph,
 }]);

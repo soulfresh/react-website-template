@@ -1,0 +1,21 @@
+# NOTES:
+# This schema definition should be pulled from the live server
+# using `yarn download-schemas` and checked into the repository.
+
+# EXAMPLE:
+# The following is an example schema to get the tests passing.
+schema {
+  query: query_root
+}
+
+type query_root {
+  users: [user!]!
+}
+
+type user {
+  user_id: Int!
+  email: String!
+  first_name: String!
+  last_name: String!
+}
+

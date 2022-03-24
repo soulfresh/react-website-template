@@ -34,7 +34,7 @@ describe('ErrorView', function() {
     });
   });
 
-  describe('with a title', () => {
+  describe('with a title and content', () => {
     const title = 'Foo Bar';
     const content = 'There was a problem.';
 

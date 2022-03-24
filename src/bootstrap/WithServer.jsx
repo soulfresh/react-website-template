@@ -1,55 +1,32 @@
 import React from 'react';
-import queryString from 'query-string';
 
-import { env } from '../env';
 import {
   ExampleService,
   ExampleServiceProvider,
 } from '~/services';
+import { useServiceOptions } from '~/utils'
 
 import { Main } from './Main.jsx';
 
 /* istanbul ignore next: This will never be run in tests but may be imported */
-function useExampleServiceClient(authResponse, onAuthFailure, exampleServiceClient, options) {
+function useExampleService({
+  authResponse,
+  onAuthFailure,
+  exampleService,
+  options,
+}) {
+  let clientCreationCount = React.useRef(0);
   return React.useMemo(() => {
-    if (exampleServiceClient) {
-      return exampleServiceClient
+    if (exampleService) {
+      return exampleService
     } else if (authResponse?.token) {
-      return new ExampleService({ onAuthFailure, authToken: authResponse?.token, options })
+      ++clientCreationCount.current
+      if (clientCreationCount.current > 1) console.warn(`ExampleService created ${clientCreationCount.current} times. This may or may not be an issue epending on your service implementation.`);
+      return new ExampleService({ onAuthFailure, authToken: authResponse?.token, options });
     } else {
       return undefined
     }
-  }, [authResponse, onAuthFailure, exampleServiceClient])
-}
-
-/**
- * Create an options object to pass to the service
- * factories by merging the options passed and
- * any query parameters in the URL.
- * @param {object} options - Mock options
- * @return {object} options that include any query
- *   parameters in the browser URL.
- */
-// eslint-disable-next-line no-unused-vars
-function makeServiceFactoryOptions(options) {
-  // Merge any query params from the URL into the generator
-  // options so we can configure the app using query params.
-  const params = queryString.parse(window.location.search);
-  for (let key in params) {
-    if (params[key] === 'true') {
-      params[key] = true;
-    } else if (params[key] === 'false') {
-      params[key] = false;
-    }
-  }
-
-  const out = {
-    ...options,
-    ...params,
-  };
-
-  if (!env.test && !env.production) console.log('service factory options:', out);
-  return out;
+  }, [authResponse, onAuthFailure, exampleService, options])
 }
 
 /**
@@ -60,30 +37,28 @@ function makeServiceFactoryOptions(options) {
  * @param {function} [props.onAuthFailure] - A callback function to call when the user's
  *   session expires.
  * @param {object} [props.history] - Override the history object.
- * @param {...*} [props.rest] - Anything else you need to pass through to the main app.
+ * @param {...*} [rest] - Anything else you need to pass through to the main app.
  */
 export default function WithServer({
   // Allow passing any services during testing
-  // xService,
-  exampleServiceClient,
+  exampleService,
   onAuthFailure,
   authResponse,
   ...rest
 }) {
   // Merge URL query prameters with any factory options
   // passed in.
-  const options = makeServiceFactoryOptions();
-
-  if (!env.production) {
-    if (!env.test) console.info('-- API clients have been made available globally --');
-    // Provide global access to the clients for debugging and experimenting.
-    // window.xAPI = xClient;
-  }
+  const options = useServiceOptions();
 
   // Wrap the `Main` component in any API context providers...
   return (
     <ExampleServiceProvider
-      value={useExampleServiceClient(authResponse, onAuthFailure, exampleServiceClient, options)}
+      value={useExampleService({
+        authResponse,
+        onAuthFailure,
+        exampleService,
+        options
+      })}
     >
       <Main {...rest} />
     </ExampleServiceProvider>

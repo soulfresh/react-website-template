@@ -10,7 +10,7 @@ code documentation on how to do just that.
 ## Technologies used:
 
 - [Create React App](https://create-react-app.dev/)
-- [Customize CRA](https://github.com/arackaf/customize-cra)
+- [Craco](https://www.npmjs.com/package/@craco/craco)
   Allows customization of Create React App webpack settings without ejecting.
   In this project, customization includes an alias for referencing the root
   source folder (`~`) and a loader embedded into the index file a build time.

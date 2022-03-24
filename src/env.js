@@ -20,7 +20,7 @@ export class EnvWrapper {
     return new Proxy(env, {
       get: function(target, prop, receiver) {
         // If the property is defined on this class, use that.
-        if (me[prop]) {
+        if (me[prop] !== undefined) {
           return me[prop];
         }
         // If the property is defined on process.env, use that.
@@ -39,39 +39,58 @@ export class EnvWrapper {
     });
   }
 
-  // The environment we are currently running in.
-  environment = process.env.NODE_ENV
-
-  // Specific environment flags...
-  production  = process.env.NODE_ENV === 'production'
-  development = process.env.NODE_ENV === 'development'
-  test        = process.env.NODE_ENV === 'test'
-
-  // Whether or not to perform verbose logging.
   get verbose() {
-    return process.env.REACT_APP_VERBOSE === 'true' &&
-      // Allow turning off verbose through a query param.
-      // TODO Allow turning verbose logging on in production.
-      // TODO Read this at startup and retain the value
-      // for the rest of the session.
-      window.location.search.indexOf('verbose=false') < 0;
+    return process.env.REACT_APP_VERBOSE === 'true'
+  }
+
+  get environment() {
+    return process.env.REACT_APP_ENV
+  }
+
+  get production() {
+    return process.env.REACT_APP_ENV === 'production' || process.env.REACT_APP_ENV === 'prod'
+  }
+
+  get test() {
+    return process.env.REACT_APP_ENV === 'test'
+  }
+
+  // Alias for test
+  get testing() {
+    return process.env.REACT_APP_ENV === 'test'
+  }
+
+  get development() {
+    return process.env.REACT_APP_ENV === 'development' || process.env.REACT_APP_ENV === 'dev'
   }
 
   // Whether or not to run against mock APIs.
-  mock = process.env.REACT_APP_MOCK_APIS === 'true'
+  get mocks() {
+    return process.env.REACT_APP_MOCK_APIS === 'true'
+  }
+
+  // Alias for mocks
+  get mock() {
+    return process.env.REACT_APP_MOCK_APIS === 'true'
+  }
 
   // The name of the app.
-  appName = process.env.REACT_APP_NAME
+  get appName() {
+    return process.env.REACT_APP_NAME
+  }
 
   /**
    * Log the environment variables.
    */
-  log() {
-    if (!env.production && env.verbose && !env.test) {
+  log(force = false) {
+    if (
+      force ||
+      (!env.production && env.verbose && !env.test)
+    ) {
       console.log('[ENV] environment:', env.environment);
       for (let key in env) {
         const blacklist = ['log', 'environment', 'graphAPIKey'];
-        if (blacklist.indexOf(key) === -1) {
+        if (blacklist.indexOf(key) === -1 && key.startsWith('REACT_APP')) {
           console.log(`[ENV] ${key}:`, env[key]);
         }
       }

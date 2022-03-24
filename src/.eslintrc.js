@@ -10,8 +10,18 @@ module.exports = {
   "rules": {
     "default-case": 0,
     "no-sequences": 0,
+    "testing-library/no-render-in-setup": 0,
   },
   "globals": {
     "any": "readonly"
-  }
+  },
+  "overrides": [
+    {
+      // Storybook specific rules
+      "files": ["**/*.stories.*"],
+      "rules": {
+        "import/no-anonymous-default-export": "off"
+      }
+    }
+  ]
 };

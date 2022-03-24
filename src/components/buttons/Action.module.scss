@@ -1,5 +1,5 @@
 /* Action */
-@import 'theme';
+@import "theme";
 
 $feels: primary, success, error, warn;
 
@@ -36,7 +36,7 @@ $feels: primary, success, error, warn;
 
       &::after {
         box-shadow: shadow(hover);
-        content: '';
+        content: "";
         opacity: 0;
         transition: opacity speed(s) linear;
         box-sizing: border-box;

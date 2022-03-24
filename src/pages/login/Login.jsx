@@ -25,7 +25,7 @@ export function Login({
       className={combineClasses(styles.Login, className)}
       {...rest}
     >
-      <Action button onClick={onLogin}>Login</Action>
+      <Action onClick={onLogin}>Login</Action>
     </div>
   );
 }

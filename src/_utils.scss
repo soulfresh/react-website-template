@@ -1,0 +1,27 @@
+/// Render different styles for the Action feel variations.
+/// This mixin renders the content you pass it for each of
+/// the given feel variations. It also passes the name of
+/// the current feel variation to your content "using ($feel)".
+///
+/// @param {string[]} feels [(primary, success, error, warn)] - The list of "feel" variatios to generate.
+/// @content - The content you wish to render for each feel. Use the `using ($feel)` to access the current feel variation.
+///
+/// ```css
+///     @include feel-variations() using ($feel) {
+///       color: color($feel);
+///     }
+/// ```
+@mixin feel-variations($feels: (primary, success, error, warn), $global: false) {
+  @each $feel in $feels {
+    @if $global {
+      &:global(.#{$feel}) {
+        @content($feel);
+      }
+    }
+    @else {
+      &.#{$feel} {
+        @content($feel);
+      }
+    }
+  }
+}

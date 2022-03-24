@@ -1,14 +1,22 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+
+import { HTML } from '~/test';
+import { AuthServiceMock, createExampleServiceClientMock } from '~/services/mocks';
+import { ExampleService } from '~/services';
 
 import WithServer from './WithServer.jsx';
 
 describe('WithServer', () => {
-  let authService, history;
+  let authService, exampleService, history;
 
   beforeEach(() => {
-    authService = jest.fn();
+    authService = new AuthServiceMock(true, true);
+    exampleService = new ExampleService({
+      client: createExampleServiceClientMock(),
+      debug: false,
+    })
     history = createMemoryHistory({
       initialEntries: ['/'],
       initialIndex: 0,
@@ -20,13 +28,14 @@ describe('WithServer', () => {
       render(
         <WithServer
           authService={authService}
+          exampleService={exampleService}
           history={history}
         />
       );
     });
 
-    it('should render the home page.', () => {
-      expect(screen.getByTestId('Home')).toBeInTheDocument();
+    it('should render the home page.', async () => {
+      await HTML({testId: 'Home'}).exists();
     });
   });
 

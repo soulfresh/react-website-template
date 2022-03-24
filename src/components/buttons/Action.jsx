@@ -33,7 +33,6 @@ import { AnalyticsAction, RoutedAction } from '@thesoulfresh/react-tools';
  * for more details.
  */
 export const Action = React.forwardRef(({
-  button = false,
   solid = false,
   pill = false,
   transparent = false,
@@ -43,9 +42,15 @@ export const Action = React.forwardRef(({
   feel,
   size,
   boxy = false,
+  link,
+  to,
+  href,
   children,
   ...rest
 }, ref) => {
+  // Anything without an href, to or link prop is treated as a button.
+  const button = !href && !to && !link;
+
   const props = {
     className: combineClasses(
       styles.Action,
@@ -69,7 +74,9 @@ export const Action = React.forwardRef(({
     display,
     feel,
     size,
-    button,
+    link,
+    href,
+    to,
     children,
     ...rest,
   };

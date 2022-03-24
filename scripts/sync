@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+set -e
+
+echo "Syncing react-website-template to $1"
+echo "Working directory: $(pwd)"
+
+rsync -av --progress --delete \
+  --exclude /.git \
+  --exclude /.karma \
+  --exclude /build \
+  --exclude /coverage \
+  --exclude /node_modules \
+  --exclude /LICENSE \
+  --exclude /yarn-error.log \
+  --exclude /yarn.lock \
+  ./ \
+  $1

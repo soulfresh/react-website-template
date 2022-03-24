@@ -42,8 +42,8 @@ return createGraphClientMock(errorLink, schema, cache);
 #### Parameters
 | Name | Type | Default Value |
 | :--- | :--- | :------------ |
-| schema | `GraphQLSchema` | *-* |
-| errorLink | `ApolloLink` | *-* |
+| schema | `any` | *-* |
+| errorLink | `any` | *-* |
 | cache | `InMemoryCache` | `...` |
 | debug | `boolean` | `false` |
 
@@ -53,7 +53,7 @@ return createGraphClientMock(errorLink, schema, cache);
 
 
 #### Defined in
-- *[graph-client.mock.ts:41](https://github.com/Apartment-Snapshot/snapshot-ui/tree/main/app/src/services/graphql-utils/mocks/graph-client.mock.ts#L41)*
+- *[graph-client.mock.js:38](https://github.com/soulfresh/react-website-template/tree/master/src/services/graphql-utils/mocks/graph-client.mock.js#L38)*
 
 <br/>
 ## createTestClient
@@ -134,6 +134,6 @@ const apolloClient = createTestClient({}, errorLink);
 
 
 #### Defined in
-- *[graph-client.mock.ts:125](https://github.com/Apartment-Snapshot/snapshot-ui/tree/main/app/src/services/graphql-utils/mocks/graph-client.mock.ts#L125)*
+- *[graph-client.mock.js:122](https://github.com/soulfresh/react-website-template/tree/master/src/services/graphql-utils/mocks/graph-client.mock.js#L122)*
 
 <br/>

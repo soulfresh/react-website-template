@@ -1,20 +1,21 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import React from 'react';
+import { render, act } from '@testing-library/react';
 
-import { createExampleServiceClientMock } from '~/test';
-import { ExampleService } from '~/services';
+import { AuthServiceMock, generateAuth } from './services/auth/mocks';
+import { createExampleServiceClientMock } from './services/mocks';
+import {
+  ExampleService,
+} from './services';
+import { HTML, waitFor, Button, waitForPromise } from './test';
 
-import App from './App';
+import App from './App.jsx';
+
 
 describe('App', () => {
   let authService, user, exampleService;
 
   beforeEach(() => {
-    authService = {
-      getUser: jest.fn(),
-      authenticate: jest.fn(),
-    };
-    user = {user: 'Bob'};
+    user = generateAuth.user();
 
     exampleService = new ExampleService({
       client: createExampleServiceClientMock(),
@@ -22,138 +23,81 @@ describe('App', () => {
     });
   });
 
-  describe('using the login page functionality', () => {
-    describe('initially logged in', () => {
-      beforeEach(async () => {
-        authService.getUser.mockReturnValue(Promise.resolve(user));
-
-        render(<App authService={authService} overlay={false} exampleService={exampleService} />);
-
-        await screen.findByTestId('Main');
-      });
-
-      it('should render the main app.', () => {
-        expect(screen.getByTestId('Main')).toBeInTheDocument();
-      });
-
-      it('should not render the login page.', () => {
-        expect(screen.queryByTestId('Login')).not.toBeInTheDocument();
-      });
-    });
-
-    describe('initially logged out', () => {
-      beforeEach(() => {
-        authService.getUser.mockReturnValue(Promise.resolve(null));
-
-        render(<App authService={authService} overlay={false}  exampleService={exampleService} />);
-      });
-
-      it('should render the login page.', () => {
-        expect(screen.getByTestId('Login')).toBeInTheDocument();
-      });
-
-      it('should not bootstrap the main app yet.', () => {
-        expect(screen.queryByTestId('Main')).not.toBeInTheDocument();
-      });
-
-      describe('after login', () => {
-        beforeEach(async () => {
-          authService.authenticate.mockReturnValue(Promise.resolve(user));
-
-          userEvent.click(screen.getByText('Login'));
-
-          await screen.findByTestId('Main');
-        });
-
-        it('should render the main app.', () => {
-          expect(screen.getByTestId('Main')).toBeInTheDocument();
-        });
-
-        it('should remove the login page.', () => {
-          expect(screen.queryByTestId('Login')).not.toBeInTheDocument();
-        });
-
-        // TODO Implement these tests once your application has
-        // implemented a service that could fail if the session
-        // times out.
-        describe('and the users session expires', () => {
-          beforeEach(() => {
-            // 1. Setup a service mock that will fail with an auth error.
-            // 2. Perform an action that will trigger the service to fail.
-          });
-
-          xit('should render the login page.', () => {});
-          xit('should destroy the main app.', () => {});
-        });
-
-        describe('and then logging out', () => {
-          beforeEach(async () => {
-            userEvent.click(screen.getByText('Logout'));
-
-            await screen.findByTestId('Login');
-          });
-
-          it('should render the login page.', () => {
-            expect(screen.getByTestId('Login')).toBeInTheDocument();
-          });
-
-          it('should remove the main app entirely.', () => {
-            expect(screen.queryByTestId('Main')).not.toBeInTheDocument();
-          });
-        });
-      });
-    });
-  });
-
   describe('using the login overlay functionality', () => {
     describe('initially logged in', () => {
       beforeEach(async () => {
-        authService.getUser.mockReturnValue(Promise.resolve(user));
+        authService = new AuthServiceMock(true, true, user);
 
-        render(<App authService={authService} overlay={true}  exampleService={exampleService} />);
+        render(
+          <App
+            authService={authService}
+            exampleService={exampleService}
+            verbose={false}
+          />
+        );
 
-        await screen.findByTestId('Main');
+        await act(async () => {
+          await HTML({testId: 'Main'}).exists();
+        });
       });
 
-      it('should render the main app.', () => {
-        expect(screen.getByTestId('Main')).toBeInTheDocument();
+      it('should render the main app.', async () => {
+        await HTML({testId: 'Main'}).exists();
       });
 
-      it('should not render the login page.', () => {
-        expect(screen.queryByTestId('Login')).not.toBeInTheDocument();
+      it('should not render the login page.', async () => {
+        await HTML({testId: 'Login'}).absent();
       });
     });
 
     describe('initially logged out', () => {
-      beforeEach(() => {
-        authService.getUser.mockReturnValue(Promise.resolve(null));
+      beforeEach(async () => {
+        authService = new AuthServiceMock(false, true, user);
 
-        render(<App authService={authService} overlay={true}  exampleService={exampleService} />);
+        let promise;
+        const orig = authService.authenticate;
+        jest.spyOn(authService, 'authenticate')
+          .mockImplementation(() => promise = orig.call(authService))
+
+        render(
+          <App
+            authService={authService}
+            exampleService={exampleService}
+            verbose={false}
+          />
+        );
+
+        // We have to wait for authService.authenticate to be called.
+        await waitFor(() => expect(promise).toBeDefined())
+
+        await act(async () => {
+          // Wait for the authentication test to finish.
+          await waitForPromise(promise);
+        });
       });
 
-      it('should render the login page.', () => {
-        expect(screen.getByTestId('Login')).toBeInTheDocument();
+      it('should render the login page.', async () => {
+        await HTML({testId: 'Login'}).exists();
       });
 
-      it('should not bootstrap the main app yet.', () => {
-        expect(screen.queryByTestId('Main')).not.toBeInTheDocument();
+      it('should not bootstrap the main app yet.', async () => {
+        await HTML({testId: 'Main'}).absent();
       });
 
       describe('after login', () => {
         beforeEach(async () => {
-          authService.authenticate.mockReturnValue(Promise.resolve(user));
-
-          userEvent.click(screen.getByText('Login'));
-
-          await screen.findByTestId('Main');
+          await act(async () => {
+            await Button('Login').click();
+            await HTML({testId: 'Main'}).exists();
+          });
         });
 
-        it('should render the main app.', () => {
-          expect(screen.getByTestId('Main')).toBeInTheDocument();
+        it('should render the main app.', async () => {
+          await HTML({testId: 'Main'}).exists();
         });
 
-        it('should remove the login page.', () => {
-          expect(screen.queryByTestId('Login')).not.toBeInTheDocument();
+        it('should remove the login page.', async () => {
+          await HTML({testId: 'Login'}).absent();
         });
 
         // TODO Implement these tests once your application has
@@ -171,20 +115,21 @@ describe('App', () => {
 
         describe('and then logging out', () => {
           beforeEach(async () => {
-            userEvent.click(screen.getByText('Logout'));
-
-            await screen.findByTestId('Login');
+            await act(async () => {
+              await Button('Logout').click();
+              await HTML({testId: 'Login'}).exists();
+            });
           });
 
-          it('should render the login overlay.', () => {
-            expect(screen.getByTestId('Login')).toBeInTheDocument();
+          it('should render the login overlay.', async () => {
+            await HTML({testId: 'Login'}).exists();
           });
 
           // In this case, we want to ensure that the state
           // is completely recreated so we don't accidentally
           // reveal the previous user data to the next user.
-          it('should remove the main app entirely.', () => {
-            expect(screen.queryByTestId('Main')).not.toBeInTheDocument();
+          it('should remove the main app entirely.', async () => {
+            await HTML({testId: 'Main'}).absent();
           });
         });
       });

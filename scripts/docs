@@ -4,16 +4,15 @@ set -e
 
 echo 'Building Docs 🚀'
 
-# Add all commands used to build your docs here...
+# Services
+node ./scripts/typedocs/index.js build src/services/auth/index.js --repo https://github.com/soulfresh/react-website-template/tree/master
+node ./scripts/typedocs/index.js build src/services/graphql-utils/index.js --repo https://github.com/soulfresh/react-website-template/tree/master
+node ./scripts/typedocs/index.js build src/services/graphql-utils/mocks/index.js --repo https://github.com/soulfresh/react-website-template/tree/master
+node ./scripts/typedocs/index.js build src/services/example-graphql-service/index.js --repo https://github.com/soulfresh/react-website-template/tree/master
+node ./scripts/typedocs/index.js build src/services/example-graphql-service/mocks/index.js --repo https://github.com/soulfresh/react-website-template/tree/master
 
-# Create JS documentation
-# I usually create multiple outputs which I then
-# include into my Storybook docs as described here:
-# https://github.com/storybookjs/storybook/issues/7644#issuecomment-710361531
+# Testing
+node ./scripts/typedocs/index.js build src/test/index.js --repo https://github.com/soulfresh/react-website-template/tree/master
 
-# npx jsdoc2md --files src/foo.js > src/API.md
-
-# Create SASS documentation
-npx sassdoc2md ./src/**/*.scss > ./src/SASS_API.md
-
-echo 'Donzo 💪'
+# SASS utilities
+npx sassdoc2md ./src/_utils.scss > ./src/docs/SASS_Utils.md

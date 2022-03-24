@@ -1,62 +1,63 @@
+@use "sass:map";
 
 $primary: #2255FF;
 $focus: #c410ff;
 
 // Import utilities for generating the themes.
-@import '@thesoulfresh/sass-theming/utils';
-@import '@thesoulfresh/sass-theming/variables';
+@import "@thesoulfresh/sass-theming/utils";
+@import "@thesoulfresh/sass-theming/variables";
 
 $palette-font-family: (
-  'title': ('Proxima Nova', sans-serif()),
-  'body': ('Proxima Nova', sans-serif()),
-  'code': monospace(),
+  "title": ("Proxima Nova", sans-serif()),
+  "body": ("Proxima Nova", sans-serif()),
+  "code": monospace(),
 );
 
 $palette-font-size: (
-  'xxxl': 36,
-  'xxl': 24,
-  'xl': 18,
-  'l': 16,
-  'm': 14,
-  's': 12,
-  'xs': 10,
+  "xxxl": 36,
+  "xxl": 24,
+  "xl": 18,
+  "l": 16,
+  "m": 14,
+  "s": 12,
+  "xs": 10,
 );
 
 $palette-font-weight: (
-  'extrabold': 700,
-  'bold': 600,
-  'medium': 400,
-  'normal': 200,
+  "extrabold": 700,
+  "bold": 600,
+  "medium": 400,
+  "normal": 200,
 );
 
 // stylelint-disable-next-line function-comma-newline-after
-$palette-size: map-merge(map-get($theme-light, 'size'), (
-  'xxs': 6,
+$palette-size: map.merge(map.get($theme-light, "size"), (
+  "xxs": 6,
 ));
 
 $overrides: (
-  'primary': make-palette($primary),
-  'grayscale': make-palette-2(#EAEAEF, #0F0E14),
-  'focus': make-palette($focus),
-  'success': make-palette-3(#D6FFEB, #1FE686, #045a31),
-  'warn': make-palette-3(#FFF7CC, #FFE454, #4c4313),
-  'error': make-palette-3(#FFD4D4, #ED4E4E, #460d0d),
-  'font-family': $palette-font-family,
-  'font-size': $palette-font-size,
-  'font-weight': $palette-font-weight,
-  'size': $palette-size,
-  'shadow': (
-    'active': 0 8px 20px rgba(18, 25, 69, 0.12),
-    'hover':  0 12px 30px rgba(18, 25, 69, 0.2),
+  "primary": make-palette($primary),
+  "grayscale": make-palette-2(#EAEAEF, #0F0E14),
+  "focus": make-palette($focus),
+  "success": make-palette-3(#D6FFEB, #1FE686, #045a31),
+  "warn": make-palette-3(#FFF7CC, #FFE454, #4c4313),
+  "error": make-palette-3(#FFD4D4, #ED4E4E, #460d0d),
+  "font-family": $palette-font-family,
+  "font-size": $palette-font-size,
+  "font-weight": $palette-font-weight,
+  "size": $palette-size,
+  "shadow": (
+    "active": 0 8px 20px rgba(18 25 69 / 0.12),
+    "hover":  0 12px 30px rgba(18 25 69 / 0.2),
   ),
-  'radius': (
-    's': 6,
-    'm': 18,
-    'l': 24,
+  "radius": (
+    "s": 6,
+    "m": 18,
+    "l": 24,
   )
 );
 
-$theme-light: map-merge($theme-light, $overrides);
-$theme-dark: map-merge($theme-dark, $overrides);
+$theme-light: map.merge($theme-light, $overrides);
+$theme-dark: map.merge($theme-dark, $overrides);
 
-@import '@thesoulfresh/sass-theming/theme';
+@import "@thesoulfresh/sass-theming/theme";
