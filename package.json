@@ -30,6 +30,9 @@
     "release": "release-it --npm.publishArgs='--registry=https://registry.npmjs.org'",
     "postinstall": "yarn patch-package"
   },
+  "engines": {
+    "node": ">=16.0"
+  },
   "dependencies": {
     "@apollo/client": "^3.5.10",
     "@thesoulfresh/react-tools": "^1.8.3",
