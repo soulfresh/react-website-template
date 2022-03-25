@@ -11,11 +11,14 @@ import { randBoolean } from '@ngneat/falso';
  *   the return value.
  * @param {boolean} [allowEmptyEntities] - Whether or not to randomly
  *   return undefined.
+ * @param {number} [weight] - Modify how often empty values will be generated.
+ *   Less than 0 will always result in empty values and greater than 1 will always
+ *   result in the generator running.
  * @return {*} The generated item.
  */
-export function maybeGenerate(generate, allowEmptyEntities = false) {
+export function maybeGenerate(generate, allowEmptyEntities = false, weight = 0.95) {
   if (allowEmptyEntities) {
-    if (randBoolean()) {
+    if (Math.random() < weight) {
       return generate();
     }
   } else {

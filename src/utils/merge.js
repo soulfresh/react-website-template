@@ -49,6 +49,10 @@ const overwriteMerge = (destinationArray, sourceArray, options) => sourceArray;
  * Alias for `deepmerge` library but handles falsy
  * values for `a` or `b` (ie. if a or b are null,
  * a copy of the other object is returned).
+ * @param {*} a
+ * @param {*} b - Properties on b overwrite those on a
+ * @param {object} [options]
+ * @return {*} Will return the same type as the inputs.
  */
 export function merge(a, b, options) {
   if (!b) return copy(a);
@@ -58,6 +62,7 @@ export function merge(a, b, options) {
 
 /**
  * Make a deep copy of an object.
+ * @param {object} a - The object to copy.
  */
 export function copy(a) {
   if (!a) return {};
@@ -67,6 +72,9 @@ export function copy(a) {
 /**
  * Merge arrays using Array.concat. Elements in
  * `b` will appear after the elements in `a`.
+ * @param {*} a
+ * @param {*} b - The properties on b overwrite those on a.
+ * @return {*} Will return the same type as the inputs.
  */
 export function mergeConcat(a, b) {
   return merge(a, b);
@@ -75,6 +83,9 @@ export function mergeConcat(a, b) {
 /**
  * Merge arrays by replacing the array on `a`
  * with the array on `b`.
+ * @param {*} a
+ * @param {*} b - The properties on b overwrite those on a.
+ * @return {*} Will return the same type as the inputs.
  */
 export function mergeReplace(a, b) {
   return merge(a, b, {
@@ -84,9 +95,12 @@ export function mergeReplace(a, b) {
 
 /**
  * Merge arrays by merging elements at the same
- * index. For example, it element 0 is an object
+ * index. For example, if element 0 is an object
  * in both arrays, those objects will get merged
  * together.
+ * @param {*} a
+ * @param {*} b - The properties on b overwrite those on a.
+ * @return {*} Will return the same type as the inputs.
  */
 export function mergeCombine(a, b) {
   return merge(a, b, {
@@ -100,6 +114,9 @@ export function mergeCombine(a, b) {
  * if b[index] is not an object, push b[index] to the
  * end of the array instead. This is the default
  * from deepmerge v1.
+ * @param {*} a
+ * @param {*} b - The properties on b overwrite those on a.
+ * @return {*} Will return the same type as the inputs.
  */
 export function mergeHybrid(a, b) {
   return merge(a, b, {

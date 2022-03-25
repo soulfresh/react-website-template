@@ -1,0 +1,25 @@
+diff --git a/node_modules/node-plop/lib/actions/append.js b/node_modules/node-plop/lib/actions/append.js
+index 721d2ba..6de2115 100644
+--- a/node_modules/node-plop/lib/actions/append.js
++++ b/node_modules/node-plop/lib/actions/append.js
+@@ -18,6 +18,10 @@ var _commonActionUtils = require("./_common-action-utils");
+ 
+ var _commonActionInterfaceCheck = _interopRequireDefault(require("./_common-action-interface-check"));
+ 
++function escapeRegExp(text) {
++  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
++}
++
+ const doAppend = async function (data, cfg, plop, fileData) {
+   const stringToAppend = await (0, _commonActionUtils.getRenderedTemplate)(data, cfg, plop); // if the appended string should be unique (default),
+   // remove any occurence of it (but only if pattern would match)
+@@ -30,7 +34,8 @@ const doAppend = async function (data, cfg, plop, fileData) {
+     // only remove after "pattern", so that we remove not too much accidentally
+     const parts = fileData.split(cfg.pattern);
+     const lastPart = parts[parts.length - 1];
+-    const lastPartWithoutDuplicates = lastPart.replace(new RegExp(separator + stringToAppend, 'g'), '');
++    const lastPartWithoutDuplicates = lastPart
++      .replace(new RegExp(escapeRegExp(separator + stringToAppend), 'g'), '');
+     fileData = fileData.replace(lastPart, lastPartWithoutDuplicates);
+   } // add the appended string to the end of the "fileData" if "pattern"
+   // was not provided, i.e. null or false

@@ -2,17 +2,43 @@
 
 set -e
 
-echo "Syncing react-website-template to $1"
-echo "Working directory: $(pwd)"
+# rsync -av --progress --delete \
+#   --exclude /.git \
+#   --exclude /.karma \
+#   --exclude /build \
+#   --exclude /coverage \
+#   --exclude /node_modules \
+#   --exclude /LICENSE \
+#   --exclude /yarn-error.log \
+#   --exclude /yarn.lock \
+#   --exclude /assets \
+#   --exclude /src/assets \
+#   --exclude /src/test/assets \
+#   --exclude /src/components \
+#   --include /src/components/buttons \
+#   --include /src/components/errors \
+#   --include /src/components/layouts \
+#   --include /src/components/loader \
+#   --include /src/components/text \
+#   --exclude /src/pages \
+#   --exclude /services \
+#   --include /services/analytics \
+#   --include /services/auth \
+#   --include /services/example-graphql-service \
+#   --include /services/graphql-utils \
+#   ./ \
+#   $1
 
-rsync -av --progress --delete \
-  --exclude /.git \
-  --exclude /.karma \
-  --exclude /build \
-  --exclude /coverage \
-  --exclude /node_modules \
-  --exclude /LICENSE \
-  --exclude /yarn-error.log \
-  --exclude /yarn.lock \
-  ./ \
-  $1
+pwd=$(pwd)
+cd $1
+cd $pwd
+
+if output=$(git status --porcelain) && [ -z "$output" ]; then
+  echo "Syncing react-website-template to $1"
+  echo "Working directory: $(pwd)"
+  echo '🚀'
+else
+  echo "☠️  Uncommitted Files: Please commit all files in $1 first."
+  exit 1
+fi
+
