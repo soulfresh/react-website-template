@@ -1,12 +1,13 @@
 import React from 'react';
 
+import { Analytics, AnalyticsProvider } from '@thesoulfresh/react-tools';
+
 // Import the following components directly so we don't accidentally
 // import anything unnecessary.
 import { LoginConnected } from './pages/login/Login.jsx';
 import { PageLoader } from './components/loader/PageLoader.jsx';
 import { env } from './env';
 import { useAuthService } from './services/auth';
-
 
 env.log();
 
@@ -34,7 +35,7 @@ const Main = env.mock
  * @param {function} [props.onAuthFailure] - A callback function to call when the user's
  *   session expires.
  * @param {object} [props.history] - Override the history object.
- * @return {ReactElement}
+ * @return {React.ReactElement}
  */
 export function LoginOverlay({
   loading, // trap this so it's not passed to the Main component.
@@ -86,13 +87,19 @@ export function LoginOverlay({
  * @return {ReactElement}
  */
 export default function App({
-  authService,
   verbose = env.verbose,
   // Any services can be provided to the application
   // through props
+  authService,
+  analyticsService,
   ...rest
 }) {
   const auth = useAuthService(authService);
+
+  const analyticsClient = React.useMemo(
+    () => analyticsService || new Analytics(env.analyticsId, {debug: env.verbose, testMode: env.test}),
+    [analyticsService]
+  );
 
   if (verbose) {
     console.groupCollapsed('Authentication State: loading?', auth.loading, 'authenticated?', auth.authenticated);
@@ -116,7 +123,7 @@ export default function App({
   };
 
   return (
-    <>
+    <AnalyticsProvider value={analyticsClient}>
       {auth.startup &&
         // While we are in the process of determining if the
         // user was previously authenticated, show the
@@ -124,7 +131,7 @@ export default function App({
         <PageLoader />
       }
       <LoginOverlay {...props} />
-    </>
+    </AnalyticsProvider>
   );
 }
 

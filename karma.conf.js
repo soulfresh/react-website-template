@@ -31,6 +31,8 @@ module.exports = function (config) {
     src: path.resolve(__dirname, 'src'),
   };
 
+  console.log('---- FILES:', config.testPathPattern);
+
   const files = [
     './src/karma-setup.js',
     // './src/setupTests.js',

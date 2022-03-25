@@ -24,14 +24,14 @@ export class EnvWrapper {
           return me[prop];
         }
         // If the property is defined on process.env, use that.
-        else if (target[prop]) {
+        else if (target[prop] !== undefined) {
           return Reflect.get(target, prop, receiver);
         }
         // If the prop is something like "fooBar",
         // then look for "REACT_APP_FOO_BAR".
         else {
           const snaked = 'REACT_APP_' + snakeCase(prop).toUpperCase();
-          if (target[snaked]) {
+          if (target[snaked] !== undefined) {
             return Reflect.get(target, snaked, receiver);
           }
         }

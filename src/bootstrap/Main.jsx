@@ -4,6 +4,8 @@ import { Router } from './Router.jsx';
 import { Header } from './Header.jsx';
 import { Footer } from './Footer.jsx';
 
+import styles from './Main.module.scss';
+
 /**
  * This is the main layout for your application.
  *
@@ -23,7 +25,7 @@ export function Main({
   ...rest
 }) {
   return (
-    <div data-testid="Main">
+    <div data-testid="Main" className={styles.Main}>
       <Header onLogout={onLogout} />
       <Router {...rest} />
       <Footer />
