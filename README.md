@@ -131,9 +131,25 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 Clean generated files in the working directory.
 
-### `yarn eject`
+## Keeping up-to-date with this Boilerplate
 
-See [Create React App documentation](https://create-react-app.dev/docs/available-scripts/#npm-run-eject)
+This boilerplate will get updated to keep up with dependency upgrades.
+The easiest way to keep your app up-to-date with this repo's changes
+is to fork this repo as the starting point for your project. You can
+then pull in changes using Git.
+
+However, if you're unable to fork this repo as your starting point,
+you can instead use the `scripts/sync` script which will rsync changes
+across to your app. It's pretty basic but it allows you copy changes
+over to your project where you can manually decide which updates you
+want.
+
+Your project root needs to be clean before using the script:
+
+    cd react-website-template
+    ./scripts/sync ../path/to/project/your/root
+
+You can now commit the changes you want to keep in your project.
 
 ## Learn More
 
@@ -164,3 +180,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+

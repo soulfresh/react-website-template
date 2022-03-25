@@ -1,5 +1,3 @@
-import { randBoolean } from '@ngneat/falso';
-
 // This file contains helpers for generating data in tests
 // and mock environments.
 

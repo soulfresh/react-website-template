@@ -1,16 +1,3 @@
-import { prettyDOM } from '@testing-library/react';
-
-/**
- * Print an element DOM to the console.
- * @param {HTMLElement|HTMLElement[]|NodeList} el
- */
-export function printElements(el) {
-  if (el?.length !== undefined) {
-    el.forEach(e => console.log(prettyDOM(e)));
-  } else {
-    console.log(prettyDOM(el));
-  }
-}
 
 export function silenceLogs(level = 'log') {
   // @ts-ignore
