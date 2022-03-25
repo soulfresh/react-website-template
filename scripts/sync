@@ -2,41 +2,48 @@
 
 set -e
 
-# rsync -av --progress --delete \
-#   --exclude /.git \
-#   --exclude /.karma \
-#   --exclude /build \
-#   --exclude /coverage \
-#   --exclude /node_modules \
-#   --exclude /LICENSE \
-#   --exclude /yarn-error.log \
-#   --exclude /yarn.lock \
-#   --exclude /assets \
-#   --exclude /src/assets \
-#   --exclude /src/test/assets \
-#   --exclude /src/components \
-#   --include /src/components/buttons \
-#   --include /src/components/errors \
-#   --include /src/components/layouts \
-#   --include /src/components/loader \
-#   --include /src/components/text \
-#   --exclude /src/pages \
-#   --exclude /services \
-#   --include /services/analytics \
-#   --include /services/auth \
-#   --include /services/example-graphql-service \
-#   --include /services/graphql-utils \
-#   ./ \
-#   $1
-
 pwd=$(pwd)
+
+# Move into the target directory and make sure the working tree is clean.
 cd $1
-cd $pwd
 
 if output=$(git status --porcelain) && [ -z "$output" ]; then
+  # Move back to this directory to do the sync.
+  cd $pwd
+
   echo "Syncing react-website-template to $1"
   echo "Working directory: $(pwd)"
   echo '🚀'
+
+  # Sync this folder to the target folder
+  rsync -av --progress --delete \
+    --exclude /.git \
+    --exclude /.karma \
+    --exclude /build \
+    --exclude /coverage \
+    --exclude /node_modules \
+    --exclude /LICENSE \
+    --exclude /yarn-error.log \
+    --exclude /yarn.lock \
+    --exclude /assets \
+    --exclude /src/assets \
+    --exclude /src/test/assets \
+    --exclude /src/components \
+    --include /src/components/buttons \
+    --include /src/components/errors \
+    --include /src/components/layouts \
+    --include /src/components/loader \
+    --include /src/components/text \
+    --exclude /src/pages \
+    --exclude /services \
+    --include /services/analytics \
+    --include /services/auth \
+    --include /services/example-graphql-service \
+    --include /services/graphql-utils \
+    ./ \
+    $1
+
+  echo "💪 Donzo"
 else
   echo "☠️  Uncommitted Files: Please commit all files in $1 first."
   exit 1
