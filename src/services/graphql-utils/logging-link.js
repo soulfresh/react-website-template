@@ -54,6 +54,7 @@ export class LoggingLink extends ApolloLink {
     const isSubscription =
       !!operationAST && operationAST.operation === 'subscription'
     if (!isSubscription) {
+      console.groupCollapsed(`[GRAPHQL] ${operation?.operationName || 'Request'}...`)
       this.logOperation(operation, 'START')
     }
     return new Observable((observer) => {
@@ -63,10 +64,12 @@ export class LoggingLink extends ApolloLink {
       const sub = forward(operation).subscribe({
         next: (result) => {
           this.logOperation(operation, 'RESULT', result)
+          console.groupEnd()
           observer.next(result)
         },
         error: (error) => {
           this.logOperation(operation, 'ERROR', error)
+          console.groupEnd()
           observer.error(error)
         },
         complete: observer.complete.bind(observer),

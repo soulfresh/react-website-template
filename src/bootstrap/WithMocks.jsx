@@ -10,7 +10,7 @@ import {
   makeExampleServiceCacheClient,
 } from '~/services';
 import {
-  createExampleServiceClientMock,
+  createGraphQLServiceMockClient,
 } from '~/services/mocks';
 import { useServiceOptions } from '~/utils'
 
@@ -26,7 +26,7 @@ function useExampleService({authResponse, onAuthFailure, exampleService, options
       // Generate a mock client if none was passed.
       /* istanbul ignore next: It's not important how the report service is created during testing */
       return new ExampleService({
-        client: createExampleServiceClientMock({
+        client: createGraphQLServiceMockClient({
           errorLink: makeGraphQLErrorLink(onAuthFailure),
           cache: makeExampleServiceCacheClient(),
           mocks: {}, // Extra mocks
@@ -72,6 +72,8 @@ export default function WithMocks({
 
   // Construct service API clients here...
 
+  // TODO Can we make this file just a wrapper around WithServer
+  // by constructing the services and passing them to WithServer?
   // Wrap the `Main` component in any API context providers...
   return (
     <ExampleServiceProvider

@@ -25,6 +25,21 @@ export function maybeGenerate(generate, allowEmptyEntities = false, weight = 0.9
 }
 
 /**
+ * Get a list of random items, using the second list as the data source.
+ * If the requested list is longer than the data source, then the
+ * data items will be repeated in the output list in a loop.
+ * @param {number} count - The number of items to generate.
+ * @param {*[]} list - The source list.
+ * @return {*[]} The sublist with looping values if needed.
+ */
+export function listFrom(count, list) {
+  return listOf(count, (i) => {
+    const index = i % list.length
+    return list[index]
+  })
+}
+
+/**
  * Generate a list of items, calling a factory function
  * to generate each item.
  * @param {number} [count] - The number of items to generate.
@@ -42,18 +57,11 @@ export function listOf(count = 1, generate = i => i) {
   return out;
 }
 
-let id = 0;
+let id = 0
 /**
  * Generate a unique id.
- * @param {boolean} [doGen] - Whether to return undefined
- *   or a unique id. This makes it easy to use `!!generateId(includeId)`
- *   in our mock factories.
- *   false = return undefined.
- *   true || undefined = return a unique id.
  */
-export function generateId(doGen) {
-  if (doGen == null || doGen) {
-    return ++id;
-  }
+export function generateId() {
+  // eslint-disable-next-line no-plusplus
+  return String(++id)
 }
-

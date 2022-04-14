@@ -16,7 +16,7 @@ import { LoggingLink, makeGraphQLErrorLink } from '../graphql-utils'
 import { fromExampleGraph /*, toExampleGraph*/ } from './transform'
 import { makeExampleServiceCacheClient } from './cache'
 
-import * as graph from './example-service-definitions'
+import * as graph from './graphql-service.queries'
 
 /*
  * Use this class to make GraphQL requests.

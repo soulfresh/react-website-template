@@ -1,6 +1,6 @@
 - root
   - <a href="#generateexampleservice">generateExampleService</a>
-  - <a href="#createexampleserviceclientmock">createExampleServiceClientMock</a>
+  - <a href="#createexampleserviceclientmock">createGraphQLServiceMockClient</a>
 
 
 ## generateExampleService
@@ -50,9 +50,9 @@ file and should return a value matching that type.
 - *[example-service-generate.js:47](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/mocks/example-service-generate.js#L47)*
 
 <br/>
-## createExampleServiceClientMock
+## createGraphQLServiceMockClient
 
-  ▸ **createExampleServiceClientMock**(`__namedParameters`) => `ApolloClient`
+  ▸ **createGraphQLServiceMockClient**(`__namedParameters`) => `ApolloClient`
 
 Creates a mock Apollo client that will auto generate fake data
 for requests against it using the mocks returned by `createGraphMocks`.

@@ -13,5 +13,7 @@ export const fromExampleGraph = {
     firstName: u.first_name,
     lastName: u.last_name,
     name: `${u.first_name} ${u.last_name}`,
+    avatar: u.profile_picture,
+    bio: u.bio,
   }),
 }

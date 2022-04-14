@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { HTML } from '~/test';
-import { AuthServiceMock, createExampleServiceClientMock } from '~/services/mocks';
+import { AuthServiceMock, createGraphQLServiceMockClient } from '~/services/mocks';
 import { ExampleService } from '~/services';
 
 import WithServer from './WithServer.jsx';
@@ -14,7 +14,7 @@ describe('WithServer', () => {
   beforeEach(() => {
     authService = new AuthServiceMock(true, true);
     exampleService = new ExampleService({
-      client: createExampleServiceClientMock(),
+      client: createGraphQLServiceMockClient(),
       debug: false,
     })
     history = createMemoryHistory({

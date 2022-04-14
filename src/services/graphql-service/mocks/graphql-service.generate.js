@@ -1,10 +1,15 @@
-import { randFirstName, randLastName, randEmail } from '@ngneat/falso'
+import { randUser, randParagraph } from '@ngneat/falso'
+import { generateId } from '~/test/helpers'
 
-let theid = 0
-const id = (includeId = true) => {
-  // The database uses uuids instead of auto-incrementing
-  // ids so we'll fake that by returning a String.
-  if (includeId) return String(theid + 1)
+/**
+ * Maybe generate an id value. If `includeId` is false, then undefined
+ * is returned which allows the GraphQL mocks to generate their own
+ * ids.
+ * @param [includeId] - Whether to return a unique id or undefined.
+ * @return The id string
+ */
+function id(includeId) {
+  return includeId ? generateId() : undefined
 }
 
 /**
@@ -44,20 +49,25 @@ const id = (includeId = true) => {
  * of a type definition in the `~/example-graph-api-schema.graphql`
  * file and should return a value matching that type.
  */
-export const generateExampleService = {
+export const generate = {
   user: ({
     // Passing false for `includeId` allows you to generate graphql
     // objects without the ids which is useful for mocking data
     // to insert into GraphQL during testing.
     includeId,
-    user_id = id(!!includeId),
-    email = randEmail(),
-    first_name = randFirstName(),
-    last_name = randLastName(),
+    user = randUser(),
+    user_id = user.id,
+    email = user.email,
+    first_name = user.firstName,
+    last_name = user.lastName,
+    profile_picture = user.img,
+    bio = randParagraph(),
   } = {}) => ({
     user_id,
     email,
     first_name,
-    last_name
+    last_name,
+    profile_picture,
+    bio,
   }),
 }

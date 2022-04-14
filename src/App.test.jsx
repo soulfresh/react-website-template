@@ -2,7 +2,7 @@ import React from 'react';
 import { render, act } from '@testing-library/react';
 
 import { AuthServiceMock, generateAuth } from './services/auth/mocks';
-import { createExampleServiceClientMock } from './services/mocks';
+import { createGraphQLServiceMockClient } from './services/mocks';
 import {
   ExampleService,
 } from './services';
@@ -18,7 +18,7 @@ describe('App', () => {
     user = generateAuth.user();
 
     exampleService = new ExampleService({
-      client: createExampleServiceClientMock(),
+      client: createGraphQLServiceMockClient(),
       debug: false,
     });
   });

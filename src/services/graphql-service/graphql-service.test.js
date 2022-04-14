@@ -1,7 +1,7 @@
-import { ExampleService } from './example-service.js'
+import { ExampleService } from './graphql-service.js'
 import { makeExampleServiceCacheClient } from './cache'
 import { makeGraphQLErrorLink } from '../graphql-utils'
-import { createExampleServiceClientMock } from './mocks'
+import { createGraphQLServiceMockClient } from './mocks'
 
 // These tests require a schema.
 describe('ExampleService', () => {
@@ -11,7 +11,7 @@ describe('ExampleService', () => {
 
   const debug = false;
   const build = (options = {}) => {
-    const client = createExampleServiceClientMock({
+    const client = createGraphQLServiceMockClient({
       errorLink: makeGraphQLErrorLink(onAuthFailure),
       cache: makeExampleServiceCacheClient(),
       generatorOptions: options,
