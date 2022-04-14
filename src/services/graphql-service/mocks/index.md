@@ -1,9 +1,9 @@
 - root
-  - <a href="#generateexampleservice">generateExampleService</a>
+  - <a href="#generateexampleservice">generateGraphQLService</a>
   - <a href="#createexampleserviceclientmock">createGraphQLServiceMockClient</a>
 
 
-## generateExampleService
+## generateGraphQLService
 
 `generate` provides factories for generating each
 of the types defined in our Example API schema (`~/example-graph-api-schema.graphql`).

@@ -6,7 +6,7 @@ import { randNumber } from '@ngneat/falso'
 import { listOf } from '~/test/helpers'
 import { createGraphClientMock } from '../../graphql-utils/mocks'
 
-import { generate } from './graphql-service.generate'
+import { generateGraphQL } from './graphql-service.generate'
 
 import { loader } from 'graphql.macro';
 
@@ -68,8 +68,8 @@ export function createGraphQLServiceMockClient({
         // NOTE: If you need to specify mock methods in your
         // tests, you should instead pass the mocks option to
         // createReportAPIClientMock
-        ...Object.keys(generate).reduce((acc, key) => {
-          acc[key] = () => generate[key](options)
+        ...Object.keys(generateGraphQL).reduce((acc, key) => {
+          acc[key] = () => generateGraphQL[key](options)
           return acc
         }, {}),
 

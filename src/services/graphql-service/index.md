@@ -1,13 +1,13 @@
 - root
-  - <a href="#exampleservice">ExampleService</a>
+  - <a href="#exampleservice">GraphQLService</a>
     - <a href="#constructor">constructor</a>
     - <a href="#clear">clear</a>
     - <a href="#getusers">getUsers</a>
-  - <a href="#exampleservicecontext">ExampleServiceContext</a>
-  - <a href="#exampleserviceprovider">ExampleServiceProvider</a>
+  - <a href="#exampleservicecontext">GraphQLServiceContext</a>
+  - <a href="#exampleserviceprovider">GraphQLServiceProvider</a>
   - <a href="#get_users">GET_USERS</a>
-  - <a href="#makeexampleservicecacheclient">makeExampleServiceCacheClient</a>
-  - <a href="#useexampleservice">useExampleService</a>
+  - <a href="#makeexampleservicecacheclient">makeGraphQLServiceCacheClient</a>
+  - <a href="#useexampleservice">useGraphQLService</a>
 - transform
   - <a href="#fromexamplegraph">fromGraphQL</a>
   - <a href="#toexamplegraph">toGraphQL</a>
@@ -15,7 +15,7 @@
   - <a href="#preparenestedrelationships">prepareNestedRelationships</a>
 
 
-## ExampleService Class
+## GraphQLService Class
 
 __Extends__
 `unknown`
@@ -23,7 +23,7 @@ __Extends__
 
 <br/>
 
-### new ExampleService( __namedParameters )
+### new GraphQLService( __namedParameters )
 
 
 
@@ -36,7 +36,7 @@ __Extends__
 #### Defined in
 - *[example-service.js:28](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/example-service.js#L28)*
 
-<br/>### ExampleService.clear
+<br/>### GraphQLService.clear
 
 
 Clear the data cache (for example after logout).
@@ -54,7 +54,7 @@ https://www.apollographql.com/docs/react/caching/cache-interaction/#resetting-th
 #### Defined in
 - *[example-service.js:73](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/example-service.js#L73)*
 
-<br/>### ExampleService.getUsers
+<br/>### GraphQLService.getUsers
 
 
 
@@ -69,7 +69,7 @@ https://www.apollographql.com/docs/react/caching/cache-interaction/#resetting-th
 - *[example-service.js:77](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/example-service.js#L77)*
 
 <br/><br/>
-## ExampleServiceContext
+## GraphQLServiceContext
 
 
 
@@ -79,7 +79,7 @@ https://www.apollographql.com/docs/react/caching/cache-interaction/#resetting-th
 - *[example-service.js:157](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/example-service.js#L157)*
 
 <br/>
-## ExampleServiceProvider
+## GraphQLServiceProvider
 
 
 
@@ -99,9 +99,9 @@ https://www.apollographql.com/docs/react/caching/cache-interaction/#resetting-th
 - *[example-service-definitions.js:51](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/example-service-definitions.js#L51)*
 
 <br/>
-## makeExampleServiceCacheClient
+## makeGraphQLServiceCacheClient
 
-  ▸ **makeExampleServiceCacheClient**() => `InMemoryCache`
+  ▸ **makeGraphQLServiceCacheClient**() => `InMemoryCache`
 
 Make an apollo cache client that can be used to cache results so they're
 not always requested from the server.
@@ -119,9 +119,9 @@ not always requested from the server.
 - *[cache.js:7](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/cache.js#L7)*
 
 <br/>
-## useExampleService
+## useGraphQLService
 
-  ▸ **useExampleService**() => `undefined`
+  ▸ **useGraphQLService**() => `undefined`
 
 
 

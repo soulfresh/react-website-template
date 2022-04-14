@@ -4,7 +4,7 @@ import { render, act } from '@testing-library/react';
 import { AuthServiceMock, generateAuth } from './services/auth/mocks';
 import { createGraphQLServiceMockClient } from './services/mocks';
 import {
-  ExampleService,
+  GraphQLService,
 } from './services';
 import { HTML, waitFor, Button, waitForPromise } from './test';
 
@@ -17,7 +17,7 @@ describe('App', () => {
   beforeEach(() => {
     user = generateAuth.user();
 
-    exampleService = new ExampleService({
+    exampleService = new GraphQLService({
       client: createGraphQLServiceMockClient(),
       debug: false,
     });

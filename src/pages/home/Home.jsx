@@ -5,7 +5,7 @@ import { combineClasses } from '@thesoulfresh/utils';
 import { useProcessEvent } from '@thesoulfresh/react-tools';
 
 import { TitleXL } from '~/components';
-import { useExampleService } from '~/services';
+import { useGraphQLService } from '~/services';
 import {env} from '~/env';
 
 import styles from './Home.module.scss';
@@ -48,7 +48,7 @@ export function HomeConnected({
   // match,
 }) {
   const [user, setUser] = React.useState();
-  const api = useExampleService();
+  const api = useGraphQLService();
   const handleEvent = useProcessEvent();
 
   React.useEffect(() => {

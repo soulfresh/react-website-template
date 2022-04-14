@@ -2,7 +2,7 @@ import {
   fromGraphQL,
 } from '~/services';
 import {
-  generateExampleService,
+  generate as generateGraphQL,
 } from '~/services/mocks';
 
 /**
@@ -17,7 +17,7 @@ import {
  *
  * Instead of having to do this:
  * const items = fromGraphQL.items(
- *   generateExampleService.items({randomize: false})
+ *   generate.items({randomize: false})
  * );
  */
 export class TestGenerator {
@@ -61,6 +61,6 @@ export class TestGenerator {
 }
 
 export const generate = new TestGenerator([{
-  generate: generateExampleService,
+  generate: generateGraphQL,
   from: fromGraphQL,
 }]);

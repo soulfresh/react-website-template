@@ -4,7 +4,7 @@ import { InMemoryCache } from '@apollo/client'
  * Make an apollo cache client that can be used to cache results so they're
  * not always requested from the server.
  */
-export function makeExampleServiceCacheClient() {
+export function makeGraphQLServiceCacheClient() {
   return new InMemoryCache({
     addTypename: true,
     // typePolicies allow us to redirect to queries to the cache if

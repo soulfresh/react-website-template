@@ -14,7 +14,7 @@ import { env } from '~/env'
 
 import { LoggingLink, makeGraphQLErrorLink } from '../graphql-utils'
 import { fromGraphQL /*, toGraphQL*/ } from './transform'
-import { makeExampleServiceCacheClient } from './cache'
+import { makeGraphQLServiceCacheClient } from './cache'
 
 import * as graph from './graphql-service.queries'
 
@@ -24,7 +24,7 @@ import * as graph from './graphql-service.queries'
  * Global error handling is taken care of
  * by the Apollo client configuration.
  */
-export class ExampleService extends ServiceBase {
+export class GraphQLService extends ServiceBase {
   constructor({
     onAuthFailure,
     authToken,
@@ -53,7 +53,7 @@ export class ExampleService extends ServiceBase {
 
       client = new ApolloClient({
         link: ApolloLink.from(links),
-        cache: makeExampleServiceCacheClient(),
+        cache: makeGraphQLServiceCacheClient(),
       })
     }
 
@@ -154,9 +154,9 @@ export class ExampleService extends ServiceBase {
   // }
 }
 
-export const ExampleServiceContext = React.createContext(undefined)
-export const ExampleServiceProvider = ExampleServiceContext.Provider
+export const GraphQLServiceContext = React.createContext(undefined)
+export const GraphQLServiceProvider = GraphQLServiceContext.Provider
 
-export function useExampleService() {
-  return React.useContext(ExampleServiceContext)
+export function useGraphQLService() {
+  return React.useContext(GraphQLServiceContext)
 }

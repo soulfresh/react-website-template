@@ -1,5 +1,5 @@
 import { randFirstName, randLastName, randEmail } from '@ngneat/falso'
-// import { generateExampleService as gen } from '../mocks'
+// import { generate as gen } from '../mocks'
 import { toGraphQL } from './toGraphQL'
 
 describe('toGraphQL', () => {

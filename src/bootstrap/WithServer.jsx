@@ -1,15 +1,15 @@
 import React from 'react';
 
 import {
-  ExampleService,
-  ExampleServiceProvider,
+  GraphQLService,
+  GraphQLServiceProvider,
 } from '~/services';
 import { useServiceOptions } from '~/utils'
 
 import { Main } from './Main.jsx';
 
 /* istanbul ignore next: This will never be run in tests but may be imported */
-function useExampleService({
+function useGraphQLService({
   authResponse,
   onAuthFailure,
   exampleService,
@@ -21,8 +21,8 @@ function useExampleService({
       return exampleService
     } else if (authResponse?.token) {
       ++clientCreationCount.current
-      if (clientCreationCount.current > 1) console.warn(`ExampleService created ${clientCreationCount.current} times. This may or may not be an issue epending on your service implementation.`);
-      return new ExampleService({ onAuthFailure, authToken: authResponse?.token, options });
+      if (clientCreationCount.current > 1) console.warn(`GraphQLService created ${clientCreationCount.current} times. This may or may not be an issue epending on your service implementation.`);
+      return new GraphQLService({ onAuthFailure, authToken: authResponse?.token, options });
     } else {
       return undefined
     }
@@ -52,8 +52,8 @@ export default function WithServer({
 
   // Wrap the `Main` component in any API context providers...
   return (
-    <ExampleServiceProvider
-      value={useExampleService({
+    <GraphQLServiceProvider
+      value={useGraphQLService({
         authResponse,
         onAuthFailure,
         exampleService,
@@ -61,7 +61,7 @@ export default function WithServer({
       })}
     >
       <Main {...rest} />
-    </ExampleServiceProvider>
+    </GraphQLServiceProvider>
   );
 }
 

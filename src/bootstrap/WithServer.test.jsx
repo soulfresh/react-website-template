@@ -4,7 +4,7 @@ import { createMemoryHistory } from 'history';
 
 import { HTML } from '~/test';
 import { AuthServiceMock, createGraphQLServiceMockClient } from '~/services/mocks';
-import { ExampleService } from '~/services';
+import { GraphQLService } from '~/services';
 
 import WithServer from './WithServer.jsx';
 
@@ -13,7 +13,7 @@ describe('WithServer', () => {
 
   beforeEach(() => {
     authService = new AuthServiceMock(true, true);
-    exampleService = new ExampleService({
+    exampleService = new GraphQLService({
       client: createGraphQLServiceMockClient(),
       debug: false,
     })

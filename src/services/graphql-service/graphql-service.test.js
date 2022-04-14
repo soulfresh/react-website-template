@@ -1,5 +1,5 @@
-import { ExampleService } from './graphql-service.js'
-import { makeExampleServiceCacheClient } from './cache'
+import { GraphQLService } from './graphql-service.js'
+import { makeGraphQLServiceCacheClient } from './cache'
 import { makeGraphQLErrorLink } from '../graphql-utils'
 import { createGraphQLServiceMockClient } from './mocks'
 
@@ -13,7 +13,7 @@ describe('GraphQLService', () => {
   const build = (options = {}) => {
     const client = createGraphQLServiceMockClient({
       errorLink: makeGraphQLErrorLink(onAuthFailure),
-      cache: makeExampleServiceCacheClient(),
+      cache: makeGraphQLServiceCacheClient(),
       generatorOptions: options,
       debug,
     })
@@ -22,7 +22,7 @@ describe('GraphQLService', () => {
     jest.spyOn(client, 'mutate')
     jest.spyOn(client, 'clearStore')
 
-    return new ExampleService({ client, debug })
+    return new GraphQLService({ client, debug })
   }
 
   beforeEach(() => {

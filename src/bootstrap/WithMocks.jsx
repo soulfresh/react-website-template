@@ -4,10 +4,10 @@ import {
   env,
 } from '../env';
 import {
-  ExampleService,
-  ExampleServiceProvider,
+  GraphQLService,
+  GraphQLServiceProvider,
   makeGraphQLErrorLink,
-  makeExampleServiceCacheClient,
+  makeGraphQLServiceCacheClient,
 } from '~/services';
 import {
   createGraphQLServiceMockClient,
@@ -16,7 +16,7 @@ import { useServiceOptions } from '~/utils'
 
 import { Main } from './Main.jsx';
 
-function useExampleService({authResponse, onAuthFailure, exampleService, options}) {
+function useGraphQLService({authResponse, onAuthFailure, exampleService, options}) {
   return React.useMemo(() => {
     if (exampleService) {
       // Use the mocked client if one was passed in.
@@ -25,10 +25,10 @@ function useExampleService({authResponse, onAuthFailure, exampleService, options
     } else if (authResponse?.token) {
       // Generate a mock client if none was passed.
       /* istanbul ignore next: It's not important how the report service is created during testing */
-      return new ExampleService({
+      return new GraphQLService({
         client: createGraphQLServiceMockClient({
           errorLink: makeGraphQLErrorLink(onAuthFailure),
-          cache: makeExampleServiceCacheClient(),
+          cache: makeGraphQLServiceCacheClient(),
           mocks: {}, // Extra mocks
           generatorOptions: options, // Generator options
           debug: env.verbose,
@@ -76,8 +76,8 @@ export default function WithMocks({
   // by constructing the services and passing them to WithServer?
   // Wrap the `Main` component in any API context providers...
   return (
-    <ExampleServiceProvider
-      value={useExampleService({
+    <GraphQLServiceProvider
+      value={useGraphQLService({
         authResponse,
         onAuthFailure,
         exampleService,
@@ -85,6 +85,6 @@ export default function WithMocks({
       })}
     >
       <Main {...rest} />
-    </ExampleServiceProvider>
+    </GraphQLServiceProvider>
   );
 }

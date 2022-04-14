@@ -49,7 +49,7 @@ function id(includeId) {
  * of a type definition in the `~/example-graph-api-schema.graphql`
  * file and should return a value matching that type.
  */
-export const generate = {
+export const generateGraphQL = {
   user: ({
     // Passing false for `includeId` allows you to generate graphql
     // objects without the ids which is useful for mocking data

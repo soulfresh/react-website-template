@@ -84,7 +84,7 @@ export function LoginOverlay({
  * @param {object} [props.authService] - Override the auth service.
  *   This is useful during testing or rendering the mock version of
  *   the app.
- * @return {ReactElement}
+ * @return {React.ReactElement}
  */
 export default function App({
   verbose = env.verbose,
