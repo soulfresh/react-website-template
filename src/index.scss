@@ -1,6 +1,9 @@
 /* index.scss */
 @import "theme";
 
+// Bring in normalize.css from create-react-app
+@import-normalize;
+
 body {
   margin: 0;
   font-family: font-family(body);

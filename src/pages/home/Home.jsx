@@ -17,7 +17,7 @@ import styles from './Home.module.scss';
  */
 export function Home({
   className,
-  onGetUsers,
+  user,
   ...rest
 }) {
   return (
@@ -26,6 +26,10 @@ export function Home({
       {...rest}
     >
       <TitleXL>Welcome Home!</TitleXL>
+      {user &&
+        `User is: ${user.firstName} ${user.lastName}`
+      }
+      {!user && "loading user..."}
     </div>
   );
 }
@@ -42,18 +46,20 @@ export function HomeConnected({
   // location,
   // match,
 }) {
+  const [user, setUser] = React.useState();
   const api = useExampleService();
 
   React.useEffect(() => {
     // Use your API here
     api.getUsers().then(u => {
       if (!env.test) console.log('Got the users:', u)
+      if (u.length > 0) setUser(u[0]);
     });
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Only dumb components deeper in this tree...
   return (
-    <Home />
+    <Home user={user} />
   );
 }
 

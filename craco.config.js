@@ -67,6 +67,7 @@ function addHtmlReplaceWebpackPlugin(config) {
 }
 
 // See more options at
+// https://github.com/gsoft-inc/craco/blob/master/packages/craco/README.md#configuration-file
 // https://github.com/gsoft-inc/craco/blob/master/packages/craco/README.md#configuration-helpers
 module.exports = {
   style: {
