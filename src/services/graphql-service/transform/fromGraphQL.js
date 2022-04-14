@@ -6,7 +6,7 @@
  * This sheilds the application from relational data changes
  * that don't affect the application's logic or data structure.
  */
-export const fromExampleGraph = {
+export const fromGraphQL = {
   user: (u = {}) => ({
     id: u.user_id,
     email: u.email,

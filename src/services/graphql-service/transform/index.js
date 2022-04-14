@@ -1,3 +1,3 @@
-export * from './fromExampleGraph'
-export * from './toExampleGraph'
+export * from './fromGraphQL'
+export * from './toGraphQL'
 export * from './util'

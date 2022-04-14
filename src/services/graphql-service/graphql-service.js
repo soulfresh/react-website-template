@@ -13,7 +13,7 @@ import { ServiceBase } from '@thesoulfresh/utils'
 import { env } from '~/env'
 
 import { LoggingLink, makeGraphQLErrorLink } from '../graphql-utils'
-import { fromExampleGraph /*, toExampleGraph*/ } from './transform'
+import { fromGraphQL /*, toGraphQL*/ } from './transform'
 import { makeExampleServiceCacheClient } from './cache'
 
 import * as graph from './graphql-service.queries'
@@ -89,7 +89,7 @@ export class ExampleService extends ServiceBase {
       .then((results) => {
         const users = results.data.users
         // Transform the data into the format used by the UI
-        const out = users?.map(u => fromExampleGraph.user(u)) || []
+        const out = users?.map(u => fromGraphQL.user(u)) || []
         this.info('getUsers SUCCESS', out)
         return out
       })

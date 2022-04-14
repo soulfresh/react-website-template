@@ -6,7 +6,7 @@
  *
  * @see fromExampleGraph for transformations coming from GraphQL.
  */
-export const toExampleGraph = {
+export const toGraphQL = {
   user: (u) => ({
     user_id: u.id,
     email: u.email,

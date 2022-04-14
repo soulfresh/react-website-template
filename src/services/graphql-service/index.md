@@ -9,8 +9,8 @@
   - <a href="#makeexampleservicecacheclient">makeExampleServiceCacheClient</a>
   - <a href="#useexampleservice">useExampleService</a>
 - transform
-  - <a href="#fromexamplegraph">fromExampleGraph</a>
-  - <a href="#toexamplegraph">toExampleGraph</a>
+  - <a href="#fromexamplegraph">fromGraphQL</a>
+  - <a href="#toexamplegraph">toGraphQL</a>
   - <a href="#collapsenestedrelationships">collapseNestedRelationships</a>
   - <a href="#preparenestedrelationships">prepareNestedRelationships</a>
 
@@ -135,9 +135,9 @@ not always requested from the server.
 - *[example-service.js:160](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/example-service.js#L160)*
 
 <br/>
-## fromExampleGraph
+## fromGraphQL
 
-`fromExampleGraph` allows you to transform data from
+`fromGraphQL` allows you to transform data from
 the relational data model returned from GraphQL into
 the application domain model used in the client code.
 This sheilds the application from relational data changes
@@ -149,23 +149,23 @@ that don't affect the application's logic or data structure.
 
 
 #### Defined in
-- *[transform/fromExampleGraph.js:9](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/transform/fromExampleGraph.js#L9)*
+- *[transform/fromGraphQL.js:9](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/transform/fromGraphQL.js#L9)*
 
 <br/>
-## toExampleGraph
+## toGraphQL
 
-`toExampleGraph` allows transforming data
+`toGraphQL` allows transforming data
 from the application domain model to
 the relational data model used in GraphQL.
 
 
-__See:__ fromExampleGraph for transformations coming from GraphQL. <br/>
+__See:__ fromGraphQL for transformations coming from GraphQL. <br/>
 
 
 
 
 #### Defined in
-- *[transform/toExampleGraph.js:9](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/transform/toExampleGraph.js#L9)*
+- *[transform/toGraphQL.js:9](https://github.com/soulfresh/react-website-template/tree/master/src/services/example-graphql-service/transform/toGraphQL.js#L9)*
 
 <br/>
 ## collapseNestedRelationships

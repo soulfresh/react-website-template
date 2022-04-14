@@ -6,7 +6,7 @@ import { render as renderer } from '@testing-library/react';
 import {
   Analytics,
   AnalyticsProvider,
-} from '~/services/analytics';
+} from '@thesoulfresh/react-tools';
 
 export function wrapWithRouter(
   component,

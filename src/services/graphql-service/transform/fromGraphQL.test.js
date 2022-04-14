@@ -1,7 +1,7 @@
 import { randFirstName, randLastName, randEmail } from '@ngneat/falso'
-import { fromExampleGraph } from './fromExampleGraph'
+import { fromGraphQL } from './fromGraphQL'
 
-describe('fromExampleGraph', () => {
+describe('fromGraphQL', () => {
   it('user', () => {
     const firstName = randFirstName();
     const lastName = randLastName();
@@ -12,7 +12,7 @@ describe('fromExampleGraph', () => {
       last_name: lastName,
     }
 
-    expect(fromExampleGraph.user(user)).toEqual({
+    expect(fromGraphQL.user(user)).toEqual({
       id: user.user_id,
       email: user.email,
       firstName: user.first_name,

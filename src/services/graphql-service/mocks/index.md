@@ -18,7 +18,7 @@ responses but less useful if your tests/stories do not
 hit the Example API Service class (this will be the case
 everywhere except integration tests). In those cases,
 you should pass the data returned by `generate` through one of the
-`fromExampleGraph` transform methods in order to
+`fromGraphQL` transform methods in order to
 get the same shape of data returned by the Example API Service.
 
 ```js
