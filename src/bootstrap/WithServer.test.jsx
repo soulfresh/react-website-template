@@ -36,6 +36,7 @@ describe('WithServer', () => {
 
     it('should render the home page.', async () => {
       await HTML({testId: 'Home'}).exists();
+      await HTML(/User is:/).exists();
     });
   });
 

@@ -4,7 +4,7 @@ import { makeGraphQLErrorLink } from '../graphql-utils'
 import { createGraphQLServiceMockClient } from './mocks'
 
 // These tests require a schema.
-describe('ExampleService', () => {
+describe('GraphQLService', () => {
   let onAuthFailure
 
   const userCount = 3;
@@ -40,18 +40,20 @@ describe('ExampleService', () => {
 
   describe('getUser', () => {
     it('should be able to get all users', async () => {
-      const api = build({userCount})
+      const api = build({userCount, includeId: true})
       const result = await api.getUsers()
 
       expect(api.client.query).toHaveBeenCalledTimes(1)
 
       expect(result.length).toEqual(userCount)
       expect(result[0]).toEqual({
-        id: expect.any(Number),
+        id: expect.any(String),
         email: expect.any(String),
         firstName: expect.any(String),
         lastName: expect.any(String),
         name: `${result[0].firstName} ${result[0].lastName}`,
+        avatar: expect.any(String),
+        bio: expect.any(String),
       })
     })
   })

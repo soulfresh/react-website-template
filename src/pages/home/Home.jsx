@@ -2,6 +2,7 @@ import React from 'react';
 // eslint-disable-next-line no-unused-vars
 // import PropTypes from 'prop-types';
 import { combineClasses } from '@thesoulfresh/utils';
+import { useProcessEvent } from '@thesoulfresh/react-tools';
 
 import { TitleXL } from '~/components';
 import { useExampleService } from '~/services';
@@ -48,13 +49,16 @@ export function HomeConnected({
 }) {
   const [user, setUser] = React.useState();
   const api = useExampleService();
+  const handleEvent = useProcessEvent();
 
   React.useEffect(() => {
     // Use your API here
-    api.getUsers().then(u => {
+    api.getUsers().then(handleEvent(u => {
       if (!env.test) console.log('Got the users:', u)
-      if (u.length > 0) setUser(u[0]);
-    });
+      if (u.length > 0) {
+        setUser(u[0]);
+      }
+    }));
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Only dumb components deeper in this tree...

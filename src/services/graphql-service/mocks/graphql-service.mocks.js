@@ -3,6 +3,7 @@ import { addMocksToSchema } from '@graphql-tools/mock'
 import merge from 'lodash/merge'
 import { randNumber } from '@ngneat/falso'
 
+import { listOf } from '~/test/helpers'
 import { createGraphClientMock } from '../../graphql-utils/mocks'
 
 import { generate } from './graphql-service.generate'
@@ -109,9 +110,9 @@ export function createGraphQLServiceMockClient({
         // This example shows how you could setup the mocks to return a specific
         // number of users by passing the userCount when you create the mock
         // client.
-        // users: () => {
-        //   return listOf(generatorOptions.userCount, () => store.get('user', email))
-        // },
+        users: () => {
+          return listOf(generatorOptions.userCount, () => store.get('user'))
+        },
         ...resolvers.query_root,
       },
     }),

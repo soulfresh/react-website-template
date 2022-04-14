@@ -56,7 +56,7 @@ export const generate = {
     // to insert into GraphQL during testing.
     includeId,
     user = randUser(),
-    user_id = user.id,
+    user_id = id(includeId),
     email = user.email,
     first_name = user.firstName,
     last_name = user.lastName,
