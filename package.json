@@ -7,20 +7,21 @@
     "build": "craco build",
     "test": "env-cmd -f ./.env.test craco test",
     "test-debug": "env-cmd -f ./.env.test react-scripts --inspect-brk test --runInBand --no-cache --watch",
-    "test-ci": "env-cmd -f ./.env.test craco test --watchAll=false --runInBand --coverage=true  --reporters=default --reporters=jest-junit",
-    "test-browser": "env-cmd -f ./.env.test karma start --reporters=progress,kjhtml --browser-loglevel=debug --browsers ChromeDev",
+    "test-ci": "env-cmd -f ./.env.test craco test --watchAll=false --runInBand --coverage=true --coverageDirectory='reports/coverage' --reporters=default --reporters=jest-junit --ci",
+    "test-browser": "env-cmd -f ./.env.test karma start --reporters=progress,kjhtml --browser-loglevel=debug --no-browsers",
+    "coverage": "yarn test-ci --coverageThreshold '{}' && open ./coverage/lcov-report/index.html",
     "analyze-ci": "yarn build && source-map-explorer 'build/static/js/*.js' --html coverage/analysis/result.html",
     "analyze": "yarn analyze-ci && open coverage/analysis/result.html",
     "clean": "rimraf build coverage storybook-static",
     "stylelint": "stylelint 'src/**/*.scss'",
     "stylelint-fix": "yarn stylelint --fix",
     "eslint": "eslint --max-warnings 1 --ext js,jsx src",
-    "eslint-fix": "eslint --fix --ext js,jsx src",
-    "eslint-ci": "eslint --rule 'jasmine/no-focused-tests: error' --rule 'no-debugger: error' --ext js,jsx src",
+    "eslint-fix": "eslint --fix --max-warnings 1 --ext js,jsx  src",
+    "eslint-ci": "eslint --max-warnings 1 --ext js,jsx --config ./.eslintrc.js src",
     "lint": "yarn eslint && yarn stylelint",
     "lint-fix": "yarn eslint-fix && yarn stylelint-fix",
+    "lint-ci": "yarn eslint-ci && yarn stylelint",
     "validate": "yarn lint && yarn test-ci --coverage && yarn analyze-ci && yarn build-storybook",
-    "coverage": "yarn test-ci --coverageThreshold '{}' && open ./coverage/lcov-report/index.html",
     "docs": "./scripts/docs",
     "generate": "plop --plopfile ./scripts/plopfile.js",
     "storybook": "start-storybook -p 6006",
@@ -75,6 +76,9 @@
     "colors": "^1.4.0",
     "css-loader": "^4.3.0",
     "env-cmd": "^10.1.0",
+    "eslint-output": "^3.0.1",
+    "eslint-plugin-jest": "^26.4.6",
+    "file-loader": "^6.2.0",
     "graphql.macro": "^1.4.2",
     "graphqurl": "^1.0.1",
     "html-replace-webpack-plugin": "^2.6.0",
@@ -87,6 +91,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^5.0.0",
     "node-plop": "^0.26.2",
+    "nyc": "^15.1.0",
     "patch-package": "^6.4.7",
     "plop": "^3.0.5",
     "prop-types": "^15.8.1",
@@ -114,23 +119,18 @@
     "transform": {
       "^.+\\.[jt]sx?$": "babel-jest"
     },
-    "coverageThreshold": {
-      "global": {
-        "branches": 90,
-        "functions": 90,
-        "lines": 90,
-        "statements": 90
-      }
-    },
     "coveragePathIgnorePatterns": [
       "/node_modules/",
+      "<rootDir>/src/index.js",
+      "<rootDir>/src/env.js",
       "<rootDir>/src/test",
       "<rootDir>/src/assets/",
-      "<rootDir>/src/theme/hooks",
-      "<rootDir>/src/theme/themes",
-      "<rootDir>/src/services/auth/mocks",
-      "<rootDir>/src/services/graphql-utils/mocks",
-      "<rootDir>/src/services/report-api/mocks"
+      "<rootDir>/src/docs",
+      "karma-setup",
+      "reportWebVitals",
+      "mock",
+      "page-object",
+      "stories"
     ]
   },
   "jest-junit": {

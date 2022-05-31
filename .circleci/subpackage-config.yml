@@ -1,0 +1,268 @@
+# TODO Before using, replace {SUBPACKAGE_DIR} with the name of the subpackage root folder
+version: 2.1
+
+executors:
+  node:
+    docker:
+      # Find the latest images at
+      # https://circleci.com/developer/images/image/cimg/node
+      - image: cimg/node:16.13.2-browsers
+    working_directory: ~/stagency
+  # speedtest:
+  #   machine: true
+  #   working_directory: ~/stagency
+
+parameters:
+  project_name:
+    type: string
+    default: stagency
+  cache_id:
+    type: string
+    default: v2
+  workspace_dir:
+    type: string
+    default: .
+
+commands:
+  # To push Storybook to GitHub pages, you will need to setup a deploy key.
+  # set_deploy_key:
+  #   description: Sets the ssh key to allow pushing to GitHub branches
+  #   steps:
+  #     - add_ssh_keys:
+  #         fingerprints:
+  #           - '51:54:...'
+
+  # Firebase config should you need it
+  # gcloud_auth:
+  #   description: "Authenticate the Google Cloud SDK"
+  #   parameters:
+  #     keyfile:
+  #       type: string
+  #       default: "GCP_DEV_KEY"
+  #   steps:
+  #     - run:
+  #         name: "Activate GCP Service Account"
+  #         command: |
+  #           # https://github.com/firebase/firebase-tools/issues/825
+  #           # https://developers.google.com/accounts/docs/application-default-credentials
+  #           echo ${<< parameters.keyfile >>} | base64 -d > ${HOME}/gcloud-service-key.json
+  #           echo 'export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/gcloud-service-key.json"' >> $BASH_ENV
+
+  install_dependencies:
+    description: 'Install dependencies with caching.'
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            # https://circleci.com/docs/2.0/caching/#yarn-node
+            - << pipeline.parameters.cache_id >>-<< pipeline.parameters.project_name >>-{{ checksum "./{SUBPACKAGE_DIR}/yarn.lock" }}-{{ checksum ".nvmrc" }}
+            - << pipeline.parameters.cache_id >>-<< pipeline.parameters.project_name >>-
+      - run:
+          name: 'Install Dependencies'
+          command: |
+            cd ./{SUBPACKAGE_DIR}
+            yarn install
+      # Save to cache for faster installs next build.
+      - save_cache:
+          key: << pipeline.parameters.cache_id >>-<< pipeline.parameters.project_name >>-{{ checksum "./{SUBPACKAGE_DIR}/yarn.lock" }}-{{ checksum ".nvmrc" }}
+          paths:
+            - ~/.cache/yarn
+            - ~/.nvm
+            - ./node_modules
+            - ./{SUBPACKAGE_DIR}/node_modules
+      # TODO Would it be faster just to run install and clone on every run?
+      # Persist the specified paths into the workspace for use in downstream job.
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: << pipeline.parameters.workspace_dir >>
+          # Must be relative path from root
+          paths:
+            # Store the files necessary to test and build this package.
+            - {SUBPACKAGE_DIR}
+
+  save_logs:
+    description: 'Save logs.'
+    steps:
+      - store_artifacts:
+          path: ~/.npm/_logs
+
+jobs:
+  # You can call commands from the monorepo root .circleci/config.yml like this:
+  # module-a-build:
+  #   docker:
+  #     - image: alpine
+  #   steps:
+  #     - common-say-hello:
+  #         to: A
+  #     - run: echo 'Hello world from module A! :3'
+
+  install_dependencies:
+    executor: node
+    steps:
+      - checkout
+      - install_dependencies
+      - save_logs
+
+  test:
+    executor: node
+    parallelism: 4
+    steps:
+      - attach_workspace:
+          at: << pipeline.parameters.workspace_dir >>
+      - run:
+          name: 'Run Tests'
+          command: |
+            cd ./{SUBPACKAGE_DIR}
+            # Get the list of tests for this instance in the parallel test run.
+            TEST_LIST=$(circleci tests glob "src/**/*.test.*" | circleci tests split --split-by=timings)
+            yarn test-ci $TEST_LIST
+            # Rename the output coverage json file so we can merge all output
+            # together in the check_coverage job.
+            mv ./reports/coverage/coverage-final.json ./reports/coverage/coverage.$CIRCLE_NODE_INDEX.json
+      - store_test_results:
+          path: {SUBPACKAGE_DIR}/reports/coverage
+          destination: coverage/data
+      - persist_to_workspace:
+          root: << pipeline.parameters.workspace_dir >>
+          paths:
+            - {SUBPACKAGE_DIR}/reports/coverage
+
+  # Merge the coverage results from the parallel test runs in the `test` job
+  # into a combined coverage report and then generate an HTML representation
+  # of the coverage report for browsing through the Artifacts tab on CircleCI.
+  generate_reports:
+    executor: node
+    steps:
+      - attach_workspace:
+          at: << pipeline.parameters.workspace_dir >>
+      - run:
+          name: 'Check Test Coverage Thresholds'
+          command: |
+            cd ./{SUBPACKAGE_DIR}
+            # Merge the results from our parallel test runs into a single
+            # coverage report.
+            yarn nyc merge reports/coverage reports/coverage/coverage-final.json
+            # Generate an HTML report from our merged coverage report.
+            yarn nyc report -t reports/coverage --report-dir reports/coverage/html --reporter=html
+            # Determine if our coverage meets the threshold.
+            yarn nyc check-coverage --temp-dir reports/coverage
+      - store_artifacts:
+          # Copy the REPORT_DASHBOARD.html file into the root of the artifacts
+          # directory.
+          path: {SUBPACKAGE_DIR}/reports/templates
+          destination: .
+      - store_artifacts:
+          path: {SUBPACKAGE_DIR}/reports/coverage/html
+          destination: coverage/html
+
+  analyze:
+    executor: node
+    steps:
+      - attach_workspace:
+          at: << pipeline.parameters.workspace_dir >>
+      - run:
+          name: 'Lint Files'
+          command: |
+            cd ./{SUBPACKAGE_DIR}
+            yarn lint-ci
+            yarn analyze-ci
+      - store_test_results:
+          path: {SUBPACKAGE_DIR}/reports/lint
+      # https://circleci.com/docs/2.0/artifacts/
+      - store_artifacts:
+          path: {SUBPACKAGE_DIR}/reports/lint
+          destination: lint
+      - store_artifacts:
+          path: {SUBPACKAGE_DIR}/reports/analysis
+          destination: bundle-analysis
+
+  build_app:
+    executor: node
+    steps:
+      - attach_workspace:
+          at: << pipeline.parameters.workspace_dir >>
+      - run:
+          name: 'Build Frontend'
+          command: |
+            cd ./{SUBPACKAGE_DIR}
+            yarn build
+
+  build_storybook:
+    executor: node
+    steps:
+      - attach_workspace:
+          at: << pipeline.parameters.workspace_dir >>
+      - run:
+          name: 'Build Storybook'
+          command: |
+            cd ./{SUBPACKAGE_DIR}
+            yarn build-storybook
+
+workflows:
+  version: 2
+  # You can call common jobs from the monorepo root config.yml like this:
+  # module-a-workflow:
+  #   jobs:
+  #     - common-pre
+  #     - module-a-build:
+  #         requires:
+  #           - common-pre
+  #     - module-a-hello-build/hello-build:
+  #         requires:
+  #           - common-pre
+
+  test-deploy:
+    jobs:
+      - install_dependencies
+      - test:
+          requires:
+            - install_dependencies
+          filters:
+            branches:
+              ignore: gh-pages
+            # https://circleci.com/docs/2.0/workflows/#git-tag-job-execution
+            tags:
+              only: /.*/
+
+      - check_coverage:
+          requires:
+            - test
+          filters:
+            branches:
+              ignore: gh-pages
+            tags:
+              only: /.*/
+
+      - analyze:
+          requires:
+            - install_dependencies
+          filters:
+            branches:
+              ignore: gh-pages
+            # https://circleci.com/docs/2.0/workflows/#git-tag-job-execution
+            tags:
+              only: /.*/
+
+      # Eusure the app builds correctly
+      - build_app:
+          requires:
+            - install_dependencies
+          filters:
+            branches:
+              ignore: gh-pages
+            # https://circleci.com/docs/2.0/workflows/#git-tag-job-execution
+            tags:
+              only: /.*/
+
+      # Eusure our storybook builds correctly
+      - build_storybook:
+          requires:
+            - install_dependencies
+          filters:
+            branches:
+              ignore: gh-pages
+            # https://circleci.com/docs/2.0/workflows/#git-tag-job-execution
+            tags:
+              only: /.*/
+

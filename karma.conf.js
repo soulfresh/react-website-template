@@ -40,6 +40,7 @@ module.exports = function (config) {
       ? `./src/**/*${config.testPathPattern}*.test.*`
       : './src/**/*.test.*',
   ];
+
   config.set({
     plugins: [
       require('karma-webpack'),
@@ -66,12 +67,16 @@ module.exports = function (config) {
 
     browsers: ['Chrome'],
 
-    customLaunchers: {
-      ChromeDev: {
-        base: 'Chrome',
-        flags: ['--user-data-dir=./.karma/config/.chrome_dev_user']
-      }
-    },
+    // This is useful if you want Karma to launch Chrome for you. However,
+    // iTerm2 sometimes steals keyboard focus when it launches Chrome so I find
+    // it easier to manually open the page served by Karma in my standard
+    // browser by visiting the URL shown by the Karma CLI.
+    // customLaunchers: {
+    //   ChromeDev: {
+    //     base: 'Chrome',
+    //     flags: ['--user-data-dir=./.karma/config/.chrome_dev_user']
+    //   }
+    // },
 
     // Jasmine configuration
     client: {
